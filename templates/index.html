@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="wide wow-animation">
+<head>
+<title>Home</title>
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{% static 'css/css.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>  
+<div class="page">
+  {% include 'menu.html' %}
+    <main class="page-content">
+      <div class="container text-center mt-5">
+        <form action="search-results.html" method="GET" data-search-live="rd-search-results-live" class="rd-search rd-navbar-search rd-navbar-search-sm">
+          <div class="form-group">
+            <input id="rd-search-form-input" type="text" name="s" autocomplete="off" placeholder="Search" class="form-control">
+            <button type="submit" class="icon fa-search icon-gray-dark"></button>
+          </div>
+          <div id="rd-search-results-live" class="rd-search-results-live"></div>
+        </form>
+        
+      </div>
+      <section class="section-50 section-md-120 bg-downriver">
+        <div class="shell-fluid inset-sm-left-75 inset-sm-right-75">
+          <h3 class="text-center divider-sm divider-sm-mod-2 txt-white">Listado de Vehiculos</h3>
+          <p class="txt-white text-center offset-top-88"></p>
+          <div class="range offset-top-30">
+            {% for list_time, list_v,nombre_fabricante,modelo_vehiculo,img_vehiculo,socket_a,socket_b in comb_list %}
+            <div class="cell-sm-6 cell-lg-3 offset-top-10">
+              <div class="thumbnail-custom"><img src="{{img_vehiculo}}" alt="" width="420" height="300"/>
+                <div class="caption">
+                  <h6 class="txt-primary"><a href="/detalle_vehiculo/?k={{list_time}},{{list_v}}">{{nombre_fabricante}} - {{modelo_vehiculo}}</a></h6>
+                  <h7 class="txt-primary">Sokets:</h7><br>
+                  <h7 class="txt-primary">Sokets A: {{socket_a}} | Sokets B: {{socket_b}}</h7>
+                  <div class="text-center offset-top-60">
+                    <a href="/detalle_vehiculo/?k={{list_time}},{{list_v}}" class="btn btn-sm-3 btn-primary btn-icon btn-icon-left btn-shadow btn-rect">
+                      <span class="icon icon-md mdi-eye"></span>
+                      <span>Detalles</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>           
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+    </main>
+    {% include 'footer.html' %}
+</div> 
+<script src="{% static 'js/core.min.js' %}"></script> 
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+<!-- End Google Tag Manager -->
+</html>

@@ -1,0 +1,39 @@
+{% load static %}
+<header class="page-head header-corporate">
+  <div class="rd-navbar-wrap">
+    <nav class="rd-navbar" data-layout="rd-navbar-fixed" data-sm-layout="rd-navbar-fullwidth" data-md-layout="rd-navbar-fullwidth" data-lg-layout="rd-navbar-static" data-md-device-layout="rd-navbar-fixed" data-lg-device-layout="rd-navbar-static" data-sm-stick-up-offset="50px" data-md-stick-up-offset="150px" data-lg-stick-up-offset="150px">
+      <div class="rd-navbar-inner">
+        <div class="rd-navbar-wrap">
+          <div class="rd-navbar-panel">
+            <button data-rd-navbar-toggle=".rd-navbar-nav-wrap" class="rd-navbar-toggle"><span></span></button>
+            <div class="rd-navbar-brand"><a href="{% url 'index' %}" class="brand-name"><img src="{% static 'images/logo.png' %}" alt="logo"/></a></div>
+          </div>
+          <div class="rd-navbar-nav-wrap">
+
+              <div class="rd-navbar-brand brand-fixed"><a href="{% url 'index' %}" class="brand-name"><img alt="logo" src="{% static 'images/logo.png' %}" /></a></div>
+            
+              <div class="container text-center mt-5"> 
+                <ul class="rd-navbar-nav">
+                <li></li><li></li>
+                <li><a href="{% url 'index' %}"> <span class="fa fa-home"></span> Inicio</a>
+                </li>
+                <li></li>
+                <li><a href="{% url 'lst_fabricante' %}"><span class="fa fa-industry"></span> Fabricantes</a>
+                </li>
+                <li></li>
+                <li><a href="{% url 'lst_vehiculo' %}"><span class="fa fa-car"></span> Vehículos</a>
+                </li>
+                <li></li>
+                <li><a href="#"><span class="fa fa-user"></span></a>
+                  <ul class="rd-navbar-dropdown">
+                    <!-- aqui if de login -->
+                    <li><a href="#">Iniciar Sesión</a></li>
+                    <li><a href="#">Registrarse</a></li>
+                  </ul>
+                </li>
+            </ul>  
+          </div>   
+      </div>
+    </nav>
+  </div>
+</header>

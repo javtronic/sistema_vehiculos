@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="wide wow-animation">
+<head>
+<title>Home</title>
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{% static 'css/css.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>  
+<div class="page">
+  {% include 'menu.html' %}
+    <main class="page-content">
+     
+      <section class="section-50 section-md-80">
+        <div class="shell">
+          <div class="range text-center">
+            <div class="cell-md-6 inset-md-left-38 inset-md-right-38">
+                <span class="icon icon-lg-round icon-emerland-round icon-shadow mdi-car"></span>
+              <h4 class="txt-primary divider-xs offset-top-15 offset-md-top-25">Vehículo</h4>
+
+              <p class="offset-top-30 offset-md-top-20"><strong>Fabricante: </strong>{{ nombre_fabricante }}</p>
+              <p class="offset-top-30 offset-md-top-10"><strong>Modelo: </strong>{{ modelo }}</p>
+              <p class="offset-top-30 offset-md-top-10"><strong>Descripción: </strong>{{ descripcion }}</p>
+              <!-- aqui debe ir if de login -->
+              <div class="text-center offset-top-30">
+                <a href="#" class="btn btn-sm-3 btn-primary btn-icon btn-icon-left btn-shadow btn-rect">
+                  <span class="icon icon-md mdi-eye"></span>
+                  <span>Nuevo PIN</span>
+                </a>
+              </div>
+            </div>
+            <div class="cell-md-6 offset-top-50 offset-md-top-0 inset-md-left-38 inset-md-right-38">
+                <div class="cell-sm-6 cell-lg-3">
+                    <div class="thumbnail-custom"><img src="{{imagen}}" alt="" width="620" height="300"/>    
+                    </div>
+                     
+                </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section class="section-50 section-md-5 bg-gray-lighter">
+
+      <div class="cell-md-8 offset-top">
+        <div class="divider-lg-2 offset-top-10"></div>
+        <!-- Responsive-tabs-->
+        <div class="responsive-tabs responsive-tabs-horizontal-buttons offset-top-30 responsive-tabs-default">
+          <div class="container text-left mt-5">
+          <ul class="resp-tabs-list">
+            <li>
+              <span class="icon icon-md mdi-pen"></span><span> Socket A</span>
+            </li>
+            <li>
+              <span class="icon icon-md mdi-pen"></span><span> Socket B</span>
+            </li>
+          </ul>
+        </div>
+          <div class="resp-tabs-container">
+            <div>
+              <div class="shell-fluid inset-sm-left-75 inset-sm-right-75">
+                <div class="range offset-top-60">
+                  <div class="cell-sm-6 cell-lg-3">
+                    <div class="thumbnail-custom"><img src="{{img}}" alt="" width="420" height="300"/>
+                      <div class="caption text-center">
+                        <h6 class="txt-primary"><a href="#">PIN A No</a></h6><br>
+                        <!-- if de login -->
+                        <a href="/mostrar/?z={{time}}" class="btn btn-sm-3 btn-danger btn-icon btn-icon-left btn-shadow btn-rect">
+                          <span class="icon icon-md mdi-eye"></span>
+                          <span>Eliminar</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>           
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="shell-fluid inset-sm-left-75 inset-sm-right-75">
+                <div class="range offset-top-60">
+                  <div class="cell-sm-6 cell-lg-3">
+                    <div class="thumbnail-custom"><img src="{{img}}" alt="" width="420" height="300"/>
+                      <div class="caption text-center">
+                        <h6 class="txt-primary"><a href="#">PIN B No</a></h6><br>
+                        <!-- if de login -->
+                        <a href="/mostrar/?z={{time}}" class="btn btn-sm-3 btn-danger btn-icon btn-icon-left btn-shadow btn-rect">
+                          <span class="icon icon-md mdi-eye"></span>
+                          <span>Eliminar</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>           
+                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    </main>
+    {% include 'footer.html' %}
+</div> 
+<script src="{% static 'js/core.min.js' %}"></script> 
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+<!-- End Google Tag Manager -->
+</html>

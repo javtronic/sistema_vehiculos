@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="wide wow-animation">
+<head>
+<title>Home</title>
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{% static 'css/css.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="page">
+  {% include 'menu.html' %} 
+    <main class="page-content">
+      <section class="section-50 section-md-50 bg-gray-lighter">
+        <div class="shell">
+          <div class="range">
+            <div class="cell-md-8 cell-sm-20 cell-lg-5">
+              <h4 class="txt-gray-darker">Registro de Fabricantes</h4>
+              <div class="divider-lg-2 offset-top-10"></div>
+              <!-- form -->
+              <form action="/post_crear_fabricante/" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="nombre"><h6>Nombre</h6></label>
+                  <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Marca" required>
+                </div>
+               
+                <div class="form-group offset-top-30">
+                  <label for="modelo"><h6>Imagen</h6></label>
+                  <input class="form-control" type="file" name="files[]" id="files" accept="image/*" required>
+                  <input type="hidden" name="imagen" id="imagen">
+                  <button type="button"  class="offset-top-5 btn btn-xs btn-rect btn-info" onclick="uploadimage()">Subir Imagen</button>
+                  <p class="offset-top-2">Asegurese de Subir la imagen antes de registrar</p>
+                </div>
+                <div class="form-group offset-top-30">
+                  <button type="submit" class="btn btn-rect btn-success">Registrar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {% if messages %}
+        {% for mensaje in messages %}
+          <div class="alert {% if mensaje.tags == 'success'%} alert-success{% else %} alert-danger {% endif %}" role="alert" style="color: black;">
+            <strong>{{ mensaje }}</strong>
+            <button type="button" class="close" data-dismiss="alert" arial-label="close">
+            <spam aria-hidden="true">&times;</spam>
+            </button>
+          </div>
+        {% endfor %}    
+      {% endif %}
+        
+    </main>
+    {% include 'footer.html' %}
+</div> 
+<script src="{% static 'js/core.min.js' %}"></script> 
+<script src="{% static 'js/script.js' %}"></script>
+<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-storage.js"></script>
+</body>
+
+<script>
+  var config = {
+      apiKey: 'AIzaSyA9FRv5pqrjqufN9SIE6tRzG6JRU-dr_QI',
+      authDomain: 'vehiculos-6f105.firebaseapp.com',
+      databaseURL: 'https://vehiculos-6f105.firebaseio.com',
+      storageBucket: 'vehiculos-6f105.appspot.com',
+      messagingSenderId: "536521949602"
+  };
+
+  firebase.initializeApp(config);
+
+   function uploadimage() {
+    
+      var storage = firebase.storage();
+
+      var file = document.getElementById("files").files[0];
+
+      var storageRef = storage.ref();
+
+      var thisref = storageRef.child("Fabricantes").child(file.name).put(file);
+
+      thisref.on('state_changed', function (snapshot) {
+
+              console.log("file uplaoded succesfully");
+
+          },
+          function (error) {
+           
+          },
+
+          function () {
+              // Upload completed successfully, now we can get the download URL
+              //alteracion del codigo original funciona
+              var PromiseURL = thisref.snapshot.ref.getDownloadURL();
+
+              PromiseURL.then((value)=>{
+                  var downloadURL = value;
+                  document.getElementById("imagen").value = downloadURL;
+                  console.log(downloadURL);
+              });
+              
+              alert("Imagen Cargada Correctamente");
+          });
+      
+  }
+  </script>
+
+</html>
