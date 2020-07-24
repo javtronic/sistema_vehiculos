@@ -16,28 +16,6 @@
 <div class="page">
   {% include 'menu.html' %}
     <main class="page-content">
-      {% if request.session.uid %}
-      <div class="container text-center mt-5">
-        <a href="{% url 'crear' %}" class="btn btn-sm-3 btn-shake btn-icon btn-icon-left btn-shadow btn-rect pull-md-right offset-lg-top-10 offset-top-20 reveal-block reveal-sm-inline-block">
-          <span class="icon icon-md	mdi-plus-box"></span><span>Nuevo Vehículo</span></a><br> 
-      </div>
-      {% else %}
-      <div class="container text-center mt-4">
-        <a href="{% url 'crear_solicitud/k=lst_v' %}" class="pull-md-right offset-lg-top-10 offset-top-20 reveal-sm-inline-block">
-          <span>¡Solicítalo Aqui!</span></a>
-          <p class="pull-md-right offset-lg-top-10 offset-top-20 reveal-block reveal-sm-inline-block">¿No existe el Vehículo?&nbsp;</p><br>
-      </div>
-      {% endif %}
-      <div class="container text-center mt-6 section-30">   
-        <form id="fabricantes" action="/lst_vehiculo" method="GET" class="rd-search rd-navbar-search rd-navbar-search-sm" >
-          {% csrf_token %}
-          <div class="form-group">
-            <input type="text" name="search" autocomplete="off" placeholder="Buscar...." class="form-control">
-            <button type="submit" class="icon fa-search icon-gray-dark" onclick="location.href='/lst_vehiculo/'"></button>
-          </div>
-          
-        </form>
-      </div>
       <div class="container text-center mt-6 section-20">
         {% if messages %}
         {% for mensaje in messages %}
@@ -55,40 +33,31 @@
       <div class="container text-center mt-6 section-30">
       <div class="row mb-4">
         <div class="col-md-12">
-          <h1 style="font-size: 28px;">Listado de Vehículos</h1><br>              
+          <h1 style="font-size: 28px;">Listado de Solicitudes</h1><br>              
         </div>
-      </div>   
-            
+      </div>     
              <table class="table table-dark" id="data">
                   <thead>
                      <tr>
-                        <th style="text-align: center;" >Imagen</th>
-                        <th style="text-align: center;">Marca</th>
-                        <th style="text-align: center;">Modelo</th>
-                        <th style="text-align: center;">Descripción</th>
-                        <th style="text-align: center;" colspan="3">Opciones</th>
+                        <th style="text-align: center;" >Tipo</th>
+                        <th style="text-align: center;">Descripcion</th>
+                        <th style="text-align: center;">Realizado</th>
                      </tr>
                   </thead>
                   <tbody>
-                    {% for list_f, list_v,nombre_fabricante,modelo_vehiculo,img_vehiculo,socket_a,socket_b,descripcion in comb_list %}
+                    {% for solicitud,tipo,descripcion,realizado in comb_list %}
                      <tr>
-                      <td style="width: 15%;">
-                        <img src="{{img_vehiculo}}" class="img-fluid">
-                     </td>
-                        <td>{{ nombre_fabricante }}</td>
-                        <td>{{ modelo_vehiculo }}</td>
+                        <td>{{ tipo }}</td>
                         <td>{{ descripcion }}</td>
                         
-                        <td style="width: 3%;"><a href="/detalle_vehiculo/?k={{list_f}},{{list_v}}" class="btn btn-xs btn-rect btn-success">
-                           Detalles </a></td>
-                           <!-- desabilita boton -->
-                        <!-- <td style="width: 3%;"><a href="/editar/?k={{list_f}},{{list_v}}" class="btn btn-xs btn-rect btn-warning"> 
-                          Editar </a></td> -->
-                          {% if request.session.uid %}  
-                        <td style="width: 3%;"><a href="/eliminar/?k={{list_f}},{{list_v}}" class="btn btn-xs btn-rect btn-danger" 
-                          onclick="return confirm('¿Desea Eliminar este Vehículo?');">
-                          Eliminar </a></td>
-                          {% endif %}
+                        {% if realizado == 'no' %}  
+                        <td style="width: 3%;"><a href="/realizar_solicitud/?k={{solicitud}}" class="btn btn-xs btn-rect btn-info" 
+                          onclick="return confirm('¿Desea dar por realizada esta Solicitud?');">
+                          Realizar </a></td>
+                        {%else%}
+                        <td style="width: 3%;"><button disabled  class="btn btn-xs btn-rect btn-success ">
+                          Hecho </button></td>
+                        {% endif %}
                      </tr>
                      {% endfor %}
                   </tbody>

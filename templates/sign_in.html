@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="wide wow-animation">
+<head>
+<title>Home</title>
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{% static 'css/css.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>  
+<div class="page">
+  {% include 'menu.html' %}
+    <main class="page-content">
+      <div class="container text-center mt-6 section-30">
+        {% if messages %}
+        {% for mensaje in messages %}
+          <div class="alert {% if mensaje.tags == 'success'%} alert-success{% else %} alert-warning {% endif %}" role="alert" style="color: black;">
+            <strong>{{ mensaje }}</strong>
+            <button type="button" class="close" data-dismiss="alert" arial-label="close">
+            <spam aria-hidden="true">&times;</spam>
+            </button>
+          </div>
+        {% endfor %}    
+      {% endif %}
+      </div>   
+      <section class="section-50 section-md-100">
+        <div class="shell">
+          <div class="range">
+            <div class="cell-md-6 cell-md-preffix-3">
+              <div class="responsive-tabs responsive-tabs-default">
+                <div class="resp-tabs-container">
+                  <div>
+                    <h5 class="txt-gray-darker text-center offset-sm-top-30">Iniciar Sesión</h5><br>
+                    <div class="divider-lg-2 offset-top-10"></div>
+                    <!-- RD Mailform-->
+                    <form action="/post_sign_in/" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="contact-name" class="form-label">Correo Electrónico</label>
+                      <input id="contact-name" type="email" name="email" data-constraints="@Required @Email" class="form-control">
+                    </div>
+                    <div class="form-group offset-top-40">
+                      <label for="password" class="form-label">Contraseña</label>
+                      <input id="password" type="password" name="password" data-constraints="@Required" class="form-control">
+                    </div>
+                    <div class="form-meta offset-top-17">
+                      <button type="submit" class="btn btn-emerland btn-sm-2 btn-shadow btn-rect btn-icon btn-icon-left"><span class="icon icon-white icon-md mdi-login"></span><span>Ingresar</span></button>
+                    </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    {% include 'footer.html' %}
+</div> 
+<script src="{% static 'js/core.min.js' %}"></script> 
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+<!-- End Google Tag Manager -->
+</html>

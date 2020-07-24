@@ -15,30 +15,41 @@
 <div class="page">
   {% include 'menu.html' %}
     <main class="page-content">
-      <div class="container text-center mt-5">
-        <form action="search-results.html" method="GET" data-search-live="rd-search-results-live" class="rd-search rd-navbar-search rd-navbar-search-sm">
+      <div class="container text-center mt-6 section-30">   
+        <form id="fabricantes" action="/" method="GET" class="rd-search rd-navbar-search rd-navbar-search-sm" >
+          {% csrf_token %}
           <div class="form-group">
-            <input id="rd-search-form-input" type="text" name="s" autocomplete="off" placeholder="Search" class="form-control">
-            <button type="submit" class="icon fa-search icon-gray-dark"></button>
+            <input type="text" name="search" autocomplete="off" placeholder="Buscar...." class="form-control">
+            <button type="submit" class="icon fa-search icon-gray-dark" onclick="location.href='/'"></button>
           </div>
-          <div id="rd-search-results-live" class="rd-search-results-live"></div>
         </form>
-        
+      </div>
+      <div class="container text-center mt-5 section-10">
+        {% if messages %}
+        {% for mensaje in messages %}
+          <div class="alert {% if mensaje.tags == 'success'%} alert-success{% else %} alert-warning {% endif %}" role="alert" style="color: black;">
+            <strong>{{ mensaje }}</strong>
+            <button type="button" class="close" data-dismiss="alert" arial-label="close">
+            <spam aria-hidden="true">&times;</spam>
+            </button>
+          </div>
+        {% endfor %}    
+      {% endif %}
       </div>
       <section class="section-50 section-md-120 bg-downriver">
         <div class="shell-fluid inset-sm-left-75 inset-sm-right-75">
           <h3 class="text-center divider-sm divider-sm-mod-2 txt-white">Listado de Vehiculos</h3>
           <p class="txt-white text-center offset-top-88"></p>
           <div class="range offset-top-30">
-            {% for list_time, list_v,nombre_fabricante,modelo_vehiculo,img_vehiculo,socket_a,socket_b in comb_list %}
+            {% for list_f, list_v,nombre_fabricante,modelo_vehiculo,img_vehiculo,socket_a,socket_b in comb_list %}
             <div class="cell-sm-6 cell-lg-3 offset-top-10">
               <div class="thumbnail-custom"><img src="{{img_vehiculo}}" alt="" width="420" height="300"/>
                 <div class="caption">
-                  <h6 class="txt-primary"><a href="/detalle_vehiculo/?k={{list_time}},{{list_v}}">{{nombre_fabricante}} - {{modelo_vehiculo}}</a></h6>
+                  <h6 class="txt-primary"><a href="/detalle_vehiculo/?k={{list_f}},{{list_v}}">{{nombre_fabricante}} - {{modelo_vehiculo}}</a></h6>
                   <h7 class="txt-primary">Sokets:</h7><br>
                   <h7 class="txt-primary">Sokets A: {{socket_a}} | Sokets B: {{socket_b}}</h7>
                   <div class="text-center offset-top-60">
-                    <a href="/detalle_vehiculo/?k={{list_time}},{{list_v}}" class="btn btn-sm-3 btn-primary btn-icon btn-icon-left btn-shadow btn-rect">
+                    <a href="/detalle_vehiculo/?k={{list_f}},{{list_v}}" class="btn btn-sm-3 btn-primary btn-icon btn-icon-left btn-shadow btn-rect">
                       <span class="icon icon-md mdi-eye"></span>
                       <span>Detalles</span>
                     </a>

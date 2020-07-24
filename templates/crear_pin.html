@@ -15,20 +15,42 @@
 <div class="page">
   {% include 'menu.html' %} 
     <main class="page-content">
+      <div class="container text-center mt-6 section-30">
+        {% if messages %}
+        {% for mensaje in messages %}
+          <div class="alert alert-warning" role="alert" style="color: black;">
+            <strong>{{ mensaje }}</strong>
+            <button type="button" class="close" data-dismiss="alert" arial-label="close">
+            <spam aria-hidden="true">&times;</spam>
+            </button>
+          </div>
+        {% endfor %}    
+      {% endif %}
+      </div>
       <section class="section-50 section-md-50 bg-gray-lighter">
         <div class="shell">
           <div class="range">
             <div class="cell-md-8 cell-sm-20 cell-lg-5">
-              <h4 class="txt-gray-darker">Registro de Fabricantes</h4>
+              <h4 class="txt-gray-darker">Registro de Pin</h4><br>
+              <h5>{{nombre_fabricante}} - {{modelo}}</h5>
               <div class="divider-lg-2 offset-top-10"></div>
               <!-- form -->
-              <form action="/post_crear_fabricante/" method="POST">
+              <form action="/post_crear_pin/" method="POST">
                 {% csrf_token %}
+                <input type="hidden" name="parameter" value="{{parameter}}">
                 <div class="form-group offset-top-30">
-                  <label for="nombre"><h6>Nombre</h6></label>
-                  <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Marca" required>
+                  <label for="nombre"><h6>Seleccione un Socket:</h6></label><br>
+                  <div class="form-control">
+                    <input type="radio" id="socket_a" name="socket" value="A" required>
+                    <label for="male" class=""><h7 style="color: black;">Socket A&nbsp;</h7></label>
+                    <input type="radio" id="socket_b" name="socket" value="B" required>
+                    <label for="female"><h7 style="color: black;">Socket B</h7></label><br>
+                  </div>
                 </div>
-               
+                <div class="form-group offset-top-20">
+                  <label for="modelo"><h6>Nro. de Pin</h6></label>
+                  <input type="number" class="form-control stepper-input" id="pin" name="pin" placeholder="Nro de Pin" required>
+                </div>
                 <div class="form-group offset-top-30">
                   <label for="modelo"><h6>Imagen</h6></label>
                   <input class="form-control" type="file" name="files[]" id="files" accept="image/*" required>
@@ -44,18 +66,6 @@
           </div>
         </div>
       </section>
-
-      {% if messages %}
-        {% for mensaje in messages %}
-          <div class="alert {% if mensaje.tags == 'success'%} alert-success{% else %} alert-danger {% endif %}" role="alert" style="color: black;">
-            <strong>{{ mensaje }}</strong>
-            <button type="button" class="close" data-dismiss="alert" arial-label="close">
-            <spam aria-hidden="true">&times;</spam>
-            </button>
-          </div>
-        {% endfor %}    
-      {% endif %}
-        
     </main>
     {% include 'footer.html' %}
 </div> 
@@ -84,7 +94,7 @@
 
       var storageRef = storage.ref();
 
-      var thisref = storageRef.child("Fabricantes").child(file.name).put(file);
+      var thisref = storageRef.child("Pins").child(file.name).put(file);
 
       thisref.on('state_changed', function (snapshot) {
 

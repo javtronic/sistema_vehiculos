@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from vehiculo import views
+from vehiculo import views, v_fabricante, v_solicitud
+from . import auth
 
 urlpatterns = [
     path('', views.index, name="index"),
@@ -28,11 +29,28 @@ urlpatterns = [
     path('actualizar/', views.actualizar, name="actualizar"),
     path('eliminar/', views.eliminar, name="eliminar"),
     #Fabricante
-    path('lst_fabricante/', views.lst_fabricante, name="lst_fabricante"),
-    path('crear_fabricante/', views.crear_fabricante, name="crear_fabricante"),
-    path('post_crear_fabricante/', views.post_crear_fabricante, name="post_crear_fabricante"),
-    path('editar_fabricante/', views.editar_fabricante, name="editar_fabricante"),
-    path('actualizar_fabricante/', views.actualizar_fabricante, name="actualizar_fabricante"),
-    path('eliminar_fabricante/', views.eliminar_fabricante, name="eliminar_fabricante"),
+    path('lst_fabricante/', v_fabricante.lst_fabricante, name="lst_fabricante"),
+    path('crear_fabricante/', v_fabricante.crear_fabricante, name="crear_fabricante"),
+    path('post_crear_fabricante/', v_fabricante.post_crear_fabricante, name="post_crear_fabricante"),
+    path('editar_fabricante/', v_fabricante.editar_fabricante, name="editar_fabricante"),
+    path('actualizar_fabricante/', v_fabricante.actualizar_fabricante, name="actualizar_fabricante"),
+    path('eliminar_fabricante/', v_fabricante.eliminar_fabricante, name="eliminar_fabricante"),
+    #Pins
+    path('crear_pin/', views.crear_pin, name="crear_pin"),
+    path('post_crear_pin/', views.post_crear_pin, name="post_crear_pin"),
+    path('eliminar_pin/', views.eliminar_pin, name="eliminar_pin"),
+    #Auth
+    path('sign_in/', auth.sign_in, name="sign_in"),
+    path('post_sign_in/', auth.post_sign_in, name="post_sign_in"),
+    path('sign_up/', auth.sign_up, name="sign_up"),
+    path('post_sign_up/', auth.post_sign_up, name="post_sign_up"),
+    path('logout/', auth.logout, name="logout"),
+    #Solicitud
+    path('crear_solicitud/', v_solicitud.crear_solicitud, name="crear_solicitud"),
+    path('post_crear_solicitud/', v_solicitud.post_crear_solicitud, name="post_crear_solicitud"),
+    path('lst_solicitud/', v_solicitud.lst_solicitud, name="lst_solicitud"),
+    path('realizar_solicitud/', v_solicitud.realizar_solicitud, name="realizar_solicitud"),
+
     path('admin/', admin.site.urls),
+
 ]

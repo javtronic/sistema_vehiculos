@@ -24,11 +24,19 @@
                 <li><a href="{% url 'lst_vehiculo' %}"><span class="fa fa-car"></span> Vehículos</a>
                 </li>
                 <li></li>
+                {% if request.session.uid %}
+                <li><a href="{% url 'lst_solicitud' %}"><span class="fa fa-list"></span> Solicitudes</a>
+                <li></li>
+                {% endif %}
                 <li><a href="#"><span class="fa fa-user"></span></a>
                   <ul class="rd-navbar-dropdown">
                     <!-- aqui if de login -->
-                    <li><a href="#">Iniciar Sesión</a></li>
-                    <li><a href="#">Registrarse</a></li>
+                    {% if request.session.uid %}
+                    <li><a href="{% url 'sign_up' %}">Nuevo Usuario</a></li>
+                    <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                    {% else %}
+                    <li><a href="{% url 'sign_in' %}">Iniciar Sesión</a></li>
+                    {% endif %}
                   </ul>
                 </li>
             </ul>  

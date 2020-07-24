@@ -34,7 +34,7 @@
                 <!-- form -->
                 <form action="/actualizar_fabricante/">
                   {% csrf_token %}
-                  <div class="form-group">
+                  <div class="form-group offset-top-20">
                     <input type="hidden" name="i" value="{{i}}">
                     <label for="nombre"><h6>Nombre</h6></label>
                     <input type="text" class="form-control" id="nombre" name="nombre" value="{{nombre}}"  required>

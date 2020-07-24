@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="wide wow-animation">
+<head>
+<title>Home</title>
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{% static 'css/css.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="page">
+  {% include 'menu.html' %} 
+    <main class="page-content">
+      
+      <section class="section-40 section-md-50 bg-gray-lighter">
+        <div class="shell">
+          <div class="range">
+            <div class="cell-md-8 cell-sm-20 cell-lg-5">
+              <h4 class="txt-gray-darker">Solicitud de Registro</h4><br>
+              <div class="divider-lg-2 offset-top-10"></div>
+              <form action="/post_crear_solicitud/" method="POST">
+                {% csrf_token %}
+                <div class="form-group offset-top-30">
+                  <label for="nombre"><h6>Seleccione el tipo de Requerimiento:</h6></label><br>
+                  <div class="form-control">
+                    <input type="radio" id="fabricante" name="tipo" value="fabricante" required>
+                    <label for="fabricante" class=""><h7 style="color: black;">FABRICANTE&nbsp;</h7></label>
+                    <input type="radio" id="vehiculo" name="tipo" value="vehiculo" required>
+                    <label for="vehiculo"><h7 style="color: black;">VEHÍCULO&nbsp;</h7></label>
+                    <input type="radio" id="pin" name="tipo" value="pin" required>
+                    <label for="pin"><h7 style="color: black;">PIN</h7></label><br>
+                  </div>
+                </div>
+                <div class="form-group offset-top-20">
+                  <label for="modelo"><h6>Descripción</h6></label>
+                  <textarea class="form-control" name="descripcion" id="descripcion" placeholder="Detalle su requerimiento de la solicitud, ejm: Nombre, Modelo o Nro de Pin" cols="30" rows="10" required></textarea>
+                </div>   
+                <div class="form-group offset-top-30">
+                  <button type="submit" class="btn btn-rect btn-success"><span class="icon icon-white mdi-message-text-outline"></span>&nbsp;Solicitar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    {% include 'footer.html' %}
+</div> 
+<script src="{% static 'js/core.min.js' %}"></script> 
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+
+</html>

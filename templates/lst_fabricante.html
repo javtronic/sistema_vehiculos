@@ -15,23 +15,32 @@
 <div class="page">
   {% include 'menu.html' %}
     <main class="page-content">
+      {% if request.session.uid %}
       <div class="container text-center mt-5">
         <a href="{% url 'crear_fabricante' %}" class="btn btn-sm-3 btn-shake btn-icon btn-icon-left btn-shadow btn-rect pull-md-right offset-lg-top-10 offset-top-20 reveal-block reveal-sm-inline-block">
-          <span class="icon icon-md mdi-presentation"></span><span>Nuevo Fabricante</span></a><br> 
+          <span class="icon icon-md	mdi-plus-box"></span><span>Nuevo Fabricante</span></a><br> 
       </div>
+      {% else %}
+      <div class="container text-center mt-4">
+        <a href="{% url 'crear_solicitud' %}" class="pull-md-right offset-lg-top-10 offset-top-20 reveal-sm-inline-block">
+          <span>¡Solicítalo Aqui!</span></a>
+          <p class="pull-md-right offset-lg-top-10 offset-top-20 reveal-block reveal-sm-inline-block">¿No existe el Fabricante?&nbsp;</p><br>
+      </div>
+      {% endif %}
       <div class="container text-center mt-6 section-30">   
-        <form action="search-results.html" method="GET" data-search-live="rd-search-results-live" class="rd-search rd-navbar-search rd-navbar-search-sm">
+        <form id="fabricantes" action="/lst_fabricante" method="GET" class="rd-search rd-navbar-search rd-navbar-search-sm" >
+          {% csrf_token %}
           <div class="form-group">
-            <input id="rd-search-form-input" type="text" name="s" autocomplete="off" placeholder="Search" class="form-control">
-            <button type="submit" class="icon fa-search icon-gray-dark"></button>
+            <input type="text" name="search" autocomplete="off" placeholder="Buscar...." class="form-control">
+            <button type="submit" class="icon fa-search icon-gray-dark" onclick="location.href='/lst_fabricante/'"></button>
           </div>
-          <div id="rd-search-results-live" class="rd-search-results-live"></div>
+          
         </form>
       </div>
-      <div class="container text-center mt-6 section-30">
+      <div class="container text-center mt-6 section-20">
         {% if messages %}
         {% for mensaje in messages %}
-          <div class="alert {% if mensaje.tags == 'success'%} alert-success{% else %} alert-danger {% endif %}" role="alert" style="color: black;">
+          <div class="alert {% if mensaje.tags == 'success'%} alert-success{% else %} alert-warning {% endif %}" role="alert" style="color: black;">
             <strong>{{ mensaje }}</strong>
             <button type="button" class="close" data-dismiss="alert" arial-label="close">
             <spam aria-hidden="true">&times;</spam>
@@ -49,30 +58,31 @@
         </div>
       </div>   
             
-             <table class="table table-dark">
+             <table class="table table-dark" id="data">
                   <thead>
                      <tr>
                         <th style="text-align: center;" >Imagen</th>
                         <th style="text-align: center;">Nombre</th>
-
+                        {% if request.session.uid %}
                         <th style="text-align: center;" colspan="3">Opciones</th>
+                        {% endif %}
                      </tr>
                   </thead>
                   <tbody>
-                    {% for time,date,nombre,imagen in comb_lst %}
+                    {% for time,nombre,imagen in comb_lst %}
                      <tr>
-                      <td style="width: 20%; height: 20%;">
+                      <td style="width: 12%; height: 20%;">
                         <img src="{{ imagen }}" class="img-fluid">
                      </td>
                         <td>{{ nombre }}</td>
-                        <td>{{ time }}</td>
-                        
-                       
+                        {% if request.session.uid %}
                         <td style="width: 3%;"><a href="/editar_fabricante/?z={{time}}" class="btn btn-xs btn-rect btn-warning"> 
                           Editar </a></td>
                           <!-- opciones de eliminar -->
-                        <td style="width: 3%;"><a href="/eliminar_fabricante/?z={{time}}" class="btn btn-xs btn-rect btn-danger">
+                        <td style="width: 3%;"><a href="/eliminar_fabricante/?z={{time}}" class="btn btn-xs btn-rect btn-danger"
+                          onclick="return confirm('¿Desea Eliminar este Fabricante?');">
                           Eliminar </a></td>
+                        {% endif %}
                      </tr>
                     {% endfor %}
                   </tbody>
@@ -86,5 +96,29 @@
 <script src="{% static 'js/core.min.js' %}"></script> 
 <script src="{% static 'js/script.js' %}"></script>
 </body>
+<script>
+  $(document).ready(function(){
+        $('#data').after('<div id="nav" class="pagination pagination-sm justify-content-center"></div>');
+        var rowsShown = 5;
+        var rowsTotal = $('#data tbody tr').length;
+        var numPages = rowsTotal/rowsShown;
+        for(i = 0;i < numPages;i++) {
+            var pageNum = i + 1;
+            $('#nav').append('<li class="page-item"><a class="page-link" href="#" rel="'+i+'">'+pageNum+'</a></li>');
+        }
+        $('#data tbody tr').hide();
+        $('#data tbody tr').slice(0, rowsShown).show();
+        $('#nav a:first').addClass('active');
+        $('#nav a').bind('click', function(){
 
+            $('#nav a').removeClass('active');
+            $(this).addClass('active');
+            var currPage = $(this).attr('rel');
+            var startItem = currPage * rowsShown;
+            var endItem = startItem + rowsShown;
+            $('#data tbody tr').css('opacity','0.0').hide().slice(startItem, endItem).
+                    css('display','table-row').animate({opacity:1}, 300);
+        });
+    });
+</script>
 </html>
