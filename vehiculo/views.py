@@ -291,10 +291,9 @@ def lst_vehiculo(request):
 
         for i in db_fabricantes:
             name_factory = database.child('fabricante').child(i).child('nombre').get().val() 
-                
             autos = database.child('fabricante').child(i).child('vehiculos').shallow().get().val()
             if autos != None:    
-                for j in lv:
+                for j in autos:
                     id_f = database.child('fabricante').child(i).get().key()
                     model = database.child('fabricante').child(i).child('vehiculos').child(j).child('modelo').get().val()
                     imgs = database.child('fabricante').child(i).child('vehiculos').child(j).child('imagen').get().val()
@@ -418,6 +417,21 @@ def post_crear_pin(request):
     imagen = request.POST.get('imagen')
 
     p = int(pin)
+    #Verificacion de pin existente
+    lst_pines = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').shallow().get().val()
+    pines=[]
+    if lst_pines != None:
+        for i in lst_pines:
+            pines.append(i)
+
+    if lst_pines != None:
+        for i in pines:
+            sock = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(i).child('socket').get().val()
+            pi = int(database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(i).child('pin').get().val())
+            if sock == socket and pi == p:
+                messages.error(request, 'El Pin a registrar ya existe = '+pin)
+                return redirect('/crear_pin/?k='+parameter)
+    
     if socket == "A":
         if p <= a:
             data = {
