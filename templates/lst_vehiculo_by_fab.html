@@ -79,10 +79,9 @@
                         
                         <td style="width: 3%;"><a href="/detalle_vehiculo/?k={{id_fabricante}},{{list_v}}" class="btn btn-xs btn-rect btn-success">
                            Detalles </a></td>
-                        
+                        {% if request.session.uid %} 
                         <td style="width: 3%;"><a href="/editar/?k={{id_fabricante}},{{list_v}}" class="btn btn-xs btn-rect btn-warning"> 
                           Editar </a></td>
-                          {% if request.session.uid %}  
                         <td style="width: 3%;"><a href="/eliminar/?k={{id_fabricante}},{{list_v}}" class="btn btn-xs btn-rect btn-danger" 
                           onclick="return confirm('¿Desea Eliminar este Vehículo?');">
                           Eliminar </a></td>
