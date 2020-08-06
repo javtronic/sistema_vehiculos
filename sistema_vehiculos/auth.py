@@ -3,7 +3,7 @@ from django.contrib import messages, auth
 from django.contrib.sessions.backends.base import SessionBase
 import pyrebase
 
-from vehiculo import views
+from vehiculo import v_fabricante
 
 config = {
     'apiKey': "AIzaSyA9FRv5pqrjqufN9SIE6tRzG6JRU-dr_QI",
@@ -39,7 +39,7 @@ def post_sign_in(request):
     
     session_id = user['idToken']
     request.session['uid'] = str(session_id)
-    return views.index(request)
+    return v_fabricante.index(request)
 
 def sign_up(request):
     return render(request,"sign_up.html")
@@ -71,7 +71,7 @@ def post_sign_up(request):
 def logout(request):
     if "uid" in request.session:        
         del request.session['uid']
-        return views.index(request)
+        return v_fabricante.index(request)
 
     
 
