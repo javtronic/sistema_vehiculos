@@ -55,7 +55,7 @@
       <div class="container text-center mt-6 section-30">
       <div class="row mb-4">
         <div class="col-md-12">
-          <h1 style="font-size: 28px;">Listado de Vehículos</h1><br>              
+          <h1 style="font-size: 28px;">Listado del Fabricante {{nombre_fabricante}}</h1><br>              
         </div>
       </div>   
             
@@ -63,29 +63,27 @@
                   <thead>
                      <tr>
                         <th style="text-align: center;" >Imagen</th>
-                        <th style="text-align: center;">Marca</th>
                         <th style="text-align: center;">Modelo</th>
                         <th style="text-align: center;">Descripción</th>
                         <th style="text-align: center;" colspan="3">Opciones</th>
                      </tr>
                   </thead>
                   <tbody>
-                    {% for list_f, list_v,nombre_fabricante,modelo_vehiculo,img_vehiculo,socket_a,socket_b,descripcion in comb_list %}
+                    {% for list_v,modelo_vehiculo,img_vehiculo,socket_a,socket_b,descripcion in comb_list %}
                      <tr>
                       <td style="width: 15%;">
                         <img src="{{img_vehiculo}}" class="img-fluid">
                      </td>
-                        <td>{{ nombre_fabricante }}</td>
                         <td>{{ modelo_vehiculo }}</td>
                         <td>{{ descripcion }}</td>
                         
-                        <td style="width: 3%;"><a href="/detalle_vehiculo/?k={{list_f}},{{list_v}}" class="btn btn-xs btn-rect btn-success">
+                        <td style="width: 3%;"><a href="/detalle_vehiculo/?k={{id_fabricante}},{{list_v}}" class="btn btn-xs btn-rect btn-success">
                            Detalles </a></td>
-                          {% if request.session.uid %}  
-                        <td style="width: 3%;"><a href="/editar/?k={{list_f}},{{list_v}}" class="btn btn-xs btn-rect btn-warning"> 
+                        
+                        <td style="width: 3%;"><a href="/editar/?k={{id_fabricante}},{{list_v}}" class="btn btn-xs btn-rect btn-warning"> 
                           Editar </a></td>
-                          
-                        <td style="width: 3%;"><a href="/eliminar/?k={{list_f}},{{list_v}}" class="btn btn-xs btn-rect btn-danger" 
+                          {% if request.session.uid %}  
+                        <td style="width: 3%;"><a href="/eliminar/?k={{id_fabricante}},{{list_v}}" class="btn btn-xs btn-rect btn-danger" 
                           onclick="return confirm('¿Desea Eliminar este Vehículo?');">
                           Eliminar </a></td>
                           {% endif %}

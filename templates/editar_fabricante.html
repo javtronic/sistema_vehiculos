@@ -42,10 +42,8 @@
                   <div class="form-group offset-top-30">
                     <label for="imagen"><h6>Imagen</h6></label>
                     <img src="{{imagen}}" width="7%">
-                    <input class="form-control" type="file" name="files[]" id="files" accept="image/*" required>
+                    <input class="form-control" type="file" name="files[]" id="files" accept="image/*" onchange="uploadimage()">
                     <input type="hidden" name="imagen" id="imagen" value="{{imagen}}">
-                    <button type="button"  class="offset-top-5 btn btn-xs btn-rect btn-info" onclick="uploadimage()">Subir Imagen</button>
-                    <p class="offset-top-2">Asegurese de Subir la imagen antes de registrar</p>
                   </div>
                   <div class="form-group offset-top-30">
                     <button type="submit" class="btn btn-rect btn-success">Actualizar</button>
@@ -79,12 +77,9 @@
       var file = document.getElementById("files").files[0];
 
       var storageRef = storage.ref();
-
-      var thisref = storageRef.child(file.name).put(file);
+      var thisref = storageRef.child("Fabricantes").child(file.name).put(file);
 
       thisref.on('state_changed', function (snapshot) {
-
-              console.log("file uplaoded succesfully");
 
           },
           function (error) {
@@ -102,7 +97,7 @@
                   console.log(downloadURL);
               });
               
-              alert("file uploaded successfully");
+              alert("¡La imagen se ha cargada correctamente!");
           });
   
   }

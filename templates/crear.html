@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta charset="utf-8">
-<link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+<link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="{% static 'css/css.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
@@ -63,14 +63,16 @@
                       <input type="number" class="form-control stepper-input" id="socket_b" name="socket_b" placeholder="Socket B" required>
                     </td>
                   </table>
-                  
                 </div>
                 <div class="form-group offset-top-20">
-                  <label for="imagen"><h6>Imagen</h6></label>
-                  <input class="form-control" type="file" name="files[]" id="files" accept="image/*" required>
+                  <label for="imagen"><h6>Imagen del Vehículo</h6></label>
+                  <input class="form-control" type="file" name="files[]" id="files" accept="image/*" onchange="uploadimage()" required>
                   <input type="hidden" name="imagen" id="imagen">
-                  <button type="button"  class="offset-top-5 btn btn-xs btn-rect btn-info" onclick="uploadimage()">Subir Imagen</button>
-                  <p class="offset-top-2">Asegurese de Subir la imagen antes de registrar</p>
+                </div>
+                <div class="form-group offset-top-20">
+                  <label for="imagen"><h6>Imagen de Pin Global</h6></label>
+                  <input class="form-control" type="file" name="files_sec[]" id="files_sec" accept="image/*" onchange="uploadimage_sec()" required>
+                  <input type="hidden" name="imagen_sec" id="imagen_sec">
                 </div>
                 <div class="form-group offset-top-30">
                   <button type="submit" class="btn btn-rect btn-success">Registrar</button>
@@ -101,38 +103,44 @@
   firebase.initializeApp(config);
 
    function uploadimage() {
-    
       var storage = firebase.storage();
-
       var file = document.getElementById("files").files[0];
-
       var storageRef = storage.ref();
-
       var thisref = storageRef.child("Vehiculos").child(file.name).put(file);
-
       thisref.on('state_changed', function (snapshot) {
-
-              console.log("file uplaoded succesfully");
-
           },
           function (error) {
-           
           },
-
           function () {
-              // Upload completed successfully, now we can get the download URL
-              //alteracion del codigo original funciona
               var PromiseURL = thisref.snapshot.ref.getDownloadURL();
-
               PromiseURL.then((value)=>{
                   var downloadURL = value;
                   document.getElementById("imagen").value = downloadURL;
                   console.log(downloadURL);
               });
-              
-              alert("Imagen Cargada Correctamente");
+              alert("¡La imagen se ha cargada correctamente!");
           });
-      
+  }
+
+  function uploadimage_sec(){
+      var storage = firebase.storage();
+      var file = document.getElementById("files_sec").files[0];
+      var storageRef = storage.ref();
+      var thisref = storageRef.child("Pin_Global").child(file.name).put(file);
+
+      thisref.on('state_changed', function (snapshot) {
+          },
+          function (error) {
+          },
+          function () {
+              var PromiseURL = thisref.snapshot.ref.getDownloadURL();
+              PromiseURL.then((value)=>{
+                  var downloadURL = value;
+                  document.getElementById("imagen_sec").value = downloadURL;
+                  console.log(downloadURL);
+              });
+              alert("¡La imagen se ha cargada correctamente!");
+          });
   }
   </script>
 

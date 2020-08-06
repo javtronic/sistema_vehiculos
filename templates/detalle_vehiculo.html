@@ -46,10 +46,18 @@
           </div>
         </div>
       </section>
-      
+      <section class="section-20 section-md-5 bg-downriver">
+        <div class="cell-md-8 offset-top"></div>
+        <div class="container text-center mt-6 section-20">
+          <div class="cell-sm-6 cell-lg-3">
+            <div class="thumbnail-custom"><img src="{{imagen_sec}}" style="width: 50%; "/>    
+            </div>
+        </div>
+        </div>
+      </section>
       <section class="section-20 section-md-5 bg-gray-lighter">
       <div class="cell-md-8 offset-top">
-        <div class="divider-lg-2 offset-top-10"></div>
+       
         <!-- Responsive-tabs-->
         <div class="container text-center mt-6 section-20">
           {% if messages %}
@@ -63,7 +71,7 @@
           {% endfor %}    
         {% endif %}
         </div>
-        {% if request.session.uid != True %}
+        {% if not request.session.uid%}
         <div class="container text-center mt-4">
           <a href="{% url 'crear_solicitud' %}" class="pull-md-right offset-lg-top-10 offset-top-20 reveal-sm-inline-block">
             <span>¡Solicítalo Aqui!</span></a>
@@ -80,93 +88,121 @@
               <span class="icon icon-md	mdi-fan"></span><span> Socket B</span>
             </li>
           </ul>
-        </div>
+          </div>
           <div class="resp-tabs-container">
             <div>
-              <div class="shell-fluid inset-sm-left-75 inset-sm-right-75">
-                <div class="range offset-top-60">
-                  {% for id_pin_a, pin_a,imagen_pin_a in comb_lst_a%}
-                  <div class="cell-sm-6 cell-lg-3">
-                    <div class="thumbnail-custom">
-                      <a href="" data-toggle="modal" data-target="#{{id_pin_a}}">
-                      <img src="{{imagen_pin_a}}" width="420" height="300"/>
-                      </a>
-                        <!-- The Modal -->
-                        <div class="modal" tabindex="-1" role="dialog" id="{{id_pin_a}}">
-                          <div class="modal-dialog modal-lg modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title">PIN {{pin_a}}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body" style="width: 650px; height: 500px;">
-                                <img src="{{imagen_pin_a}}" style="width: 100%; height: 95%;"/>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      <div class="caption text-center">
-                        <h6 class="txt-primary"><a href="#">PIN {{pin_a}}</a></h6><br>
-                        <!-- if de login -->
-                        {% if request.session.uid %}  
-                        <a href="/eliminar_pin/?k={{parameter}},{{id_pin_a}}" 
-                        class="btn btn-xs btn-danger btn-icon btn-icon-left btn-shadow btn-rect"
-                        onclick="return confirm('¿Desea Eliminar este Pin?');">
-                          <span class="icon icon-md mdi-delete-variant"></span>
-                          <span>Eliminar</span>
-                        </a>
-                        {% endif %}
-                      </div>
+              <div class="container text-center mt-6 section-30">
+              <table class="table table-dark" id="data">
+                <thead>
+                  <tr>
+                    <th style="text-align: center;" >Imagen</th>
+                    <th style="text-align: center;" >Nro de Pin</th>
+                    <th style="text-align: center;" colspan="2">Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if mensaje %}
+                  <tr>
+                    <td style="text-align: left;" colspan="2">
+                      <h6 class="txt-primary" style="color: brown;">{{mensaje}}</h6>
+                    </td>
+                  </tr>
+                  {% else %}
+                    {% for id_pin_a, pin_a,imagen_pin_a in comb_lst_a %}
+                    <tr>
+                      <td style="width: 15%;">
+                        <img src="{{imagen_pin_a}}" class="img-fluid">
+                     </td>
+                     <td>PIN {{pin_a}}</td>
+                     <td style="width: 3%;"><a href="" data-toggle="modal" data-target="#{{id_pin_a}}"
+                       class="btn btn-xs btn-rect btn-success"> Ver Pin <span class="icon icon-md mdi-eye"></span></a></td>
+                      <!-- The Modal -->
+              <div class="modal" tabindex="-1" role="dialog" id="{{id_pin_a}}">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">PIN {{pin_a}}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" style="width: 650px; height: 500px;">
+                      <img src="{{imagen_pin_a}}" style="width: 100%; height: 95%;"/>
                     </div>
                   </div>
-                  {% endfor %}
                 </div>
               </div>
+                     {% if request.session.uid %}
+                     <td style="width: 3%;"><a href="/eliminar_pin/?k={{parameter}},{{id_pin_a}}" class="btn btn-xs btn-rect btn-danger"
+                      onclick="return confirm('¿Desea Eliminar este Pin?');">
+                        <span class="icon icon-md mdi-delete-variant"></span>
+                        <span>Eliminar</span>
+                      </a>
+                     </td>
+                     {% endif %}
+                    </tr>
+                    {% endfor %}
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
             </div>
             <div>
-              <div class="shell-fluid inset-sm-left-75 inset-sm-right-75">
-                <div class="range offset-top-60">
+              <div class="container text-center mt-6 section-30">
+              <table class="table table-dark" id="data_b">
+                <thead>
+                  <tr>
+                    <th style="text-align: center;" >Imagen</th>
+                    <th style="text-align: center;" >Nro de Pin</th>
+                    <th style="text-align: center;" colspan="2">Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if mensaje_b %}
+                  <tr>
+                    <td style="text-align: left;" colspan="2">
+                      <h6 class="txt-primary" style="color: brown;">{{mensaje_b}}</h6>
+                    </td>
+                  </tr>
+                  {% else %}
                   {% for id_pin_b, pin_b,imagen_pin_b in comb_lst_b %}
-                  <div class="cell-sm-6 cell-lg-3">
-                    <div class="thumbnail-custom">
-                      <a href="" data-toggle="modal" data-target="#{{id_pin_b}}">
-                      <img src="{{imagen_pin_b}}" width="420" height="300" />
-                    </a>
+                    <tr>
+                      <td style="width: 15%;">
+                        <img src="{{imagen_pin_b}}" class="img-fluid">
+                     </td>
+                     <td>PIN {{pin_b}}</td>
+                     <td style="width: 3%;"><a href="" data-toggle="modal" data-target="#{{id_pin_b}}"
+                       class="btn btn-xs btn-rect btn-success"> Ver Pin <span class="icon icon-md mdi-eye"></span></a></td>
                       <!-- The Modal -->
-                      <div class="modal" tabindex="-1" role="dialog" id="{{id_pin_b}}">
-                        <div class="modal-dialog modal-lg modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title">PIN {{pin_b}}</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body" style="width: 650px; height: 500px;">
-                              <img src="{{imagen_pin_b}}" style="width: 100%; height: 95%;"/>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="caption text-center">
-                        <h6 class="txt-primary"><a href="#">PIN {{pin_b}}</a></h6><br>
-                        <!-- if de login -->
-                        {% if request.session.uid %}  
-                      <a href="/eliminar_pin/?k={{parameter}},{{id_pin_b}}" 
-                      class="btn btn-xs btn-danger btn-icon btn-icon-left btn-shadow btn-rect"
-                      type="submit" onclick="return confirm('¿Desea Eliminar este Pin?');">
-                          <span class="icon icon-md mdi-delete-variant"></span>
-                          <span>Eliminar</span>
-                        </a>
-                        {% endif %}
-                      </div>
+              <div class="modal" tabindex="-1" role="dialog" id="{{id_pin_b}}">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">PIN {{pin_b}}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
-                  </div>           
-                  {% endfor %}
+                    <div class="modal-body" style="width: 650px; height: 500px;">
+                      <img src="{{imagen_pin_b}}" style="width: 100%; height: 95%;"/>
+                    </div>
+                  </div>
                 </div>
               </div>
+                     {% if request.session.uid %}
+                     <td style="width: 3%;"><a href="/eliminar_pin/?k={{parameter}},{{id_pin_b}}" class="btn btn-xs btn-rect btn-danger"
+                      onclick="return confirm('¿Desea Eliminar este Pin?');">
+                        <span class="icon icon-md mdi-delete-variant"></span>
+                        <span>Eliminar</span>
+                      </a>
+                     </td>
+                     {% endif %}
+                    </tr>
+                    {% endfor %}
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
             </div>
           </div>
         </div>

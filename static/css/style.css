@@ -10777,11 +10777,6 @@ address {
     position: relative;
 }
 
-.bg-image-1 {
-    background-image: url("../images/1920x900.jpg");
-    position: relative;
-}
-
 .bg-image-1:before {
     content: '';
     position: absolute;
@@ -10804,10 +10799,6 @@ address {
     .bg-image-1:before {
         display: none;
     }
-}
-
-.bg-image-1-mod-1 {
-    background-image: url("../images/1920x900.jpg");
 }
 
 .txt-white {
@@ -34335,7 +34326,6 @@ ol ol {
     opacity: 0;
     visibility: hidden;
     transition: .3s all ease;
-    background: url(../images/preloader.gif) no-repeat rgba(255, 255, 255, 0.8) center center;
     z-index: 6;
 }
 
@@ -34916,7 +34906,6 @@ ol ol {
     -moz-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    background: url(../images/preloader.png) no-repeat center center;
     background-position: -648px 0;
     animation: 0.7s sprite-animation steps(12) infinite;
     opacity: 0;
@@ -36943,10 +36932,6 @@ ol ol {
     display: none;
 }
 
-.slick-loading .slick-list {
-    background: #fff url("./../images/ajax-loader.gif") center center no-repeat;
-}
-
 
 /* Icons */
 
@@ -38253,7 +38238,6 @@ html[class*="ie"] .dtp-hour-hand {
 .pswp__button,
 .pswp__button--arrow--left:before,
 .pswp__button--arrow--right:before {
-    background: url(../images/photoswipe-controls.png) 0 0 no-repeat;
     background-size: 264px 88px;
     width: 44px;
     height: 44px;
@@ -38267,7 +38251,7 @@ html[class*="ie"] .dtp-hour-hand {
     .pswp--svg .pswp__button,
     .pswp--svg .pswp__button--arrow--left:before,
     .pswp--svg .pswp__button--arrow--right:before {
-        background-image: url(../images/photoswipe-controls.svg);
+        background-image: none;
     }
     .pswp--svg .pswp__button--arrow--left,
     .pswp--svg .pswp__button--arrow--right {
@@ -38587,11 +38571,6 @@ a.pswp__share--download:hover {
 
 .pswp__preloader--active {
     opacity: 1;
-}
-
-.pswp__preloader--active .pswp__preloader__icn {
-    /* We use .gif in browsers that don't support CSS animation */
-    background: url(../images/preloader.gif) 0 0 no-repeat;
 }
 
 .pswp--css_animation .pswp__preloader--active {
@@ -39772,62 +39751,6 @@ a.pswp__share--download:hover {
     width: 100%;
 }
 
-.rd-google-map__model img {
-    max-width: none !important;
-}
-
-@media (min-width: 480px) {
-    .rd-google-map__model {
-        height: 250px;
-    }
-}
-
-@media (min-width: 992px) {
-    .rd-google-map__model {
-        height: 460px;
-    }
-}
-
-.map_locations {
-    display: none;
-}
-
-.rd-google-map-abs {
-    position: relative;
-}
-
-.rd-google-map-abs .rd-google-map__model {
-    height: 460px;
-    position: relative;
-}
-
-@media (min-width: 1200px) {
-    .rd-google-map-abs .rd-google-map__model {
-        position: absolute !important;
-        top: 0;
-        right: 0;
-        border: 0;
-        bottom: 0;
-        width: 33%;
-        height: 100%;
-    }
-}
-.rd-google-map .overlay {display:none;}
-.rd-google-map__model{border:0;scrollwheel: false;width:100%;}
-.rd-google-map{overflow:hidden;}
-@media (min-width:992px)
-{
-.rd-google-map .overlay {background:transparent;
-position:relative;
-top:460px; 
-margin-top:-460px;display:block;}
-.rd-navbar-static .rd-navbar-wrap, .rd-navbar-fullwidth .rd-navbar-wrap{padding:0 30px;}
-.top-panel {
-    background-color: #1865a0;
-    padding-left: 20px;
-    padding-right: 40px;
-}
-}
 @media (max-width:992px)
 {
 	.rd-navbar-fullwidth .rd-navbar-inner {
@@ -39847,9 +39770,3 @@ margin-top:-460px;display:block;}
     width: 80px;
 }
 }
-.bg-breadcrumbs{background-image: url("../images/1920x900.jpg");
-	background-position: center center;
-background-size: cover;}
-/*# sourceMappingURL=style.css.map */
-
-/*# metodos creados */

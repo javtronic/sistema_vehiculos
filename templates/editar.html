@@ -30,22 +30,18 @@
             <div class="range">
               <div class="cell-md-8 cell-sm-20 cell-lg-5">
                 <h4 class="txt-gray-darker">Edición de Vehículos</h4>
+                <div class="form-group offset-top-20">
+                  <label for="marca"><h6>Fabricante:
+                    <span style="font-size: 17px; color: limegreen;">{{nombre_fabricante}}</span></h6>
+                  </label>
+                </div>
                 <div class="divider-lg-2 offset-top-10"></div>
                 <!-- form -->
                 <form action="/actualizar/">
                   {% csrf_token %}
                   <input type="hidden" name="id_vehiculo" value="{{ id_vehiculo }}">
                   <input type="hidden" name="id_fabricante" value="{{ id_fabricante }}">
-                  <div class="form-group offset-top-20">
-                    <label for="marca"><h6>Fabricante:<span style="color: limegreen;" class="fa fa-check"></span>
-                      <span style="font-size: 15px; color: limegreen;">{{nombre_fabricante}}</span></h6>
-                    </label>
-                    <select class="form-control"  name="fabricante" id="fabricante" required>
-                      {% for time, nombre in comb_lst %}
-                      <option value="{{time}}">{{nombre}}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
+                  
                   <div class="form-group offset-top-20">
                     <label for="modelo"><h6>Modelo</h6></label>
                     <input type="text" class="form-control" id="modelo" name="modelo" value="{{ modelo }}" placeholder="Modelo" required>
@@ -69,12 +65,16 @@
                     </table>
                   </div>
                   <div class="form-group offset-top-30">
-                    <label for="imagen"><h6>Imagen</h6></label>
+                    <label for="imagen"><h6>Imagen del Vehículo</h6></label>
                     <img src="{{imagen}}" width="5%">
-                    <input class="form-control" type="file" name="files[]" id="files" accept="image/*">
+                    <input class="form-control" type="file" name="files[]" id="files" accept="image/*" onchange="uploadimage()">
                     <input type="hidden" name="imagen" id="imagen" value="{{imagen}}">
-                    <button type="button"  class="offset-top-5 btn btn-xs btn-rect btn-info" onclick="uploadimage()">Subir Imagen</button>
-                    <p class="offset-top-2">Asegurese de Subir la imagen antes de Actualizar</p>
+                  </div>
+                  <div class="form-group offset-top-30">
+                    <label for="imagen"><h6>Imagen de Pin Global</h6></label>
+                    <img src="{{imagen_sec}}" width="5%">
+                    <input class="form-control" type="file" name="files_sec[]" id="files_sec" accept="image/*" onchange="uploadimage_sec()">
+                    <input type="hidden" name="imagen_sec" id="imagen_sec" value="{{imagen_sec}}">
                   </div>
                   <div class="form-group offset-top-30">
                     <button type="submit" class="btn btn-rect btn-success">Actualizar</button>
@@ -112,9 +112,6 @@
       var thisref = storageRef.child("Vehiculos").child(file.name).put(file);
 
       thisref.on('state_changed', function (snapshot) {
-
-              console.log("file uplaoded succesfully");
-
           },
           function (error) {
 
@@ -131,9 +128,31 @@
                   console.log(downloadURL);
               });
               
-              alert("file uploaded successfully");
+              alert("¡La imagen se ha cargada correctamente!");
           });
   
+  }
+
+  function uploadimage_sec(){
+      var storage = firebase.storage();
+      var file = document.getElementById("files_sec").files[0];
+      var storageRef = storage.ref();
+      var thisref = storageRef.child("Pin_Global").child(file.name).put(file);
+
+      thisref.on('state_changed', function (snapshot) {
+
+          },
+          function (error) {
+          },
+          function () {
+              var PromiseURL = thisref.snapshot.ref.getDownloadURL();
+              PromiseURL.then((value)=>{
+                  var downloadURL = value;
+                  document.getElementById("imagen_sec").value = downloadURL;
+                  console.log(downloadURL);
+              });
+              alert("¡La imagen se ha cargada correctamente!");
+          });
   }
   </script>
 </html>

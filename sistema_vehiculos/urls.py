@@ -18,18 +18,24 @@ from django.urls import path
 from vehiculo import views, v_fabricante, v_solicitud
 from . import auth
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
-    path('', views.index, name="index"),
+    path('', v_fabricante.index, name="index"),
     #Vehiculo
     path('crear/', views.crear, name="crear"),
     path('post_crear/', views.post_crear, name="post_crear"),
     path('editar/', views.editar, name="editar"),
     path('detalle_vehiculo/', views.detalle_vehiculo, name="detalle_vehiculo"),
     path('lst_vehiculo/', views.lst_vehiculo, name="lst_vehiculo"),
+    path('buscar_v/', views.buscar_v, name="buscar_v"),
     path('actualizar/', views.actualizar, name="actualizar"),
     path('eliminar/', views.eliminar, name="eliminar"),
+    path('lst_vehiculo_by_fab/', v_fabricante.lst_vehiculo_by_fab, name="lst_vehiculo_by_fab"),
     #Fabricante
     path('lst_fabricante/', v_fabricante.lst_fabricante, name="lst_fabricante"),
+    path('buscar_f/', v_fabricante.buscar_f, name="buscar_f"),
     path('crear_fabricante/', v_fabricante.crear_fabricante, name="crear_fabricante"),
     path('post_crear_fabricante/', v_fabricante.post_crear_fabricante, name="post_crear_fabricante"),
     path('editar_fabricante/', v_fabricante.editar_fabricante, name="editar_fabricante"),
@@ -53,4 +59,4 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
 
-]
+] +static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
