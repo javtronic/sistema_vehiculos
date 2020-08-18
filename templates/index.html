@@ -15,39 +15,27 @@
 <div class="page">
   {% include 'menu.html' %}
     <main class="page-content">
-      <div class="container text-center mt-6 section-30">   
-        <form id="fabricantes" action="/buscar_f" method="GET" class="rd-search rd-navbar-search rd-navbar-search-sm" >
-          {% csrf_token %}
-          <div class="form-group">
-            <input type="hidden" name="ind" value="ind">
-            <input type="text" name="search" autocomplete="off" placeholder="Buscar...." class="form-control">
-            <button type="submit" class="icon fa-search icon-gray-dark" onclick="location.href='/'"></button>
-          </div>
-        </form>
-      </div>
-      <div class="container text-center mt-5 section-10">
-        {% if messages %}
-        {% for mensaje in messages %}
-          <div class="alert {% if mensaje.tags == 'success'%} alert-success{% else %} alert-warning {% endif %}" role="alert" style="color: black;">
-            <strong>{{ mensaje }}</strong>
-            <button type="button" class="close" data-dismiss="alert" arial-label="close">
-            <spam aria-hidden="true">&times;</spam>
-            </button>
-          </div>
-        {% endfor %}    
-      {% endif %}
-      </div>
-      <section class="section-50 section-md-120 bg-downriver">
+      
+      <section class="section-25 section-md-30">
         <div class="shell-fluid inset-sm-left-75 inset-sm-right-75">
-          <h3 class="text-center divider-sm divider-sm-mod-2 txt-white">Listado de Fabricantes</h3>
-          <p class="txt-white text-center offset-top-88"></p>
+          <h3 class="text-center divider-sm divider-sm-mod-2 txt-white" style="color: black;">Listado de Fabricantes</h3></br>
+          <div class="container text-align" >   
+            <form id="fabricantes" action="/buscar_f" method="GET" class="rd-search rd-navbar-search rd-navbar-search-sm" >
+              {% csrf_token %}
+              <div class="form-group " >
+                <input type="hidden" name="ind" value="ind">
+                <input type="text" name="search" autocomplete="off" placeholder="Buscar...." class="form-control">
+                <button type="submit" class="icon fa-search icon-gray-dark" onclick="location.href='/'"></button>
+              </div>
+            </form>
+          </div>
           <div class="range offset-top-30">
             {% for list_time,nombre,imagen in comb_lst %}
             <div class="cell-sm-6 cell-lg-3 offset-top-10">
-              <div class="thumbnail-custom"><img src="{{imagen}}" style="width: 430px; height: 290px;"/>
+              <div class="thumbnail-custom text-center"><img src="{{imagen}}" style="width: 205px; height: 175px;"/>
                 <div class="caption">
                   <h6 class="txt-primary" style="text-align: center;"><a href="/lst_vehiculo_by_fab/?z={{list_time}}">{{nombre}}</a></h6>   
-                  <div class="text-center offset-top-60">
+                  <div class="text-center offset-top-30">
                     <a href="/lst_vehiculo_by_fab/?z={{list_time}}" class="btn btn-sm-3 btn-primary btn-icon btn-icon-left btn-shadow btn-rect">
                       <span class="icon icon-md mdi-eye"></span>
                       <span>Ver Vehículos</span>
