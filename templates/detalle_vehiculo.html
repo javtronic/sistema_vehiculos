@@ -20,7 +20,7 @@
         <div class="shell">
           <div class="range text-center">
             <div class="cell-md-6 inset-md-left-38 inset-md-right-38">
-                <span class="icon icon-lg-round icon-emerland-round icon-shadow mdi-car"></span>
+            <img src="{{imagen}}" alt="" style="width: 160px; height: 150px; border-radius: 150px;"/>
               <h4 class="txt-primary divider-xs offset-top-15 offset-md-top-25">Vehículo</h4>
 
               <p class="offset-top-30 offset-md-top-20"><strong>Fabricante: </strong>{{ nombre_fabricante }}</p>
@@ -38,7 +38,7 @@
             </div>
             <div class="cell-md-6 offset-top-50 offset-md-top-0 inset-md-left-38 inset-md-right-38">
                 <div class="cell-sm-6 cell-lg-3">
-                    <div class="thumbnail-custom"><img src="{{imagen}}" alt="" width="620" height="300"/>    
+                    <div class="thumbnail-custom"><img src="{{imagen_sec}}" alt="" width="620" height="300"/>    
                     </div>
                      
                 </div>
@@ -46,18 +46,8 @@
           </div>
         </div>
       </section>
-      <section class="section-20 section-md-5 bg-downriver">
-        <div class="cell-md-8 offset-top"></div>
-        <div class="container text-center mt-6 section-20">
-          <div class="cell-sm-6 cell-lg-3">
-            <div class="thumbnail-custom"><img src="{{imagen_sec}}" style="width: 50%; "/>    
-            </div>
-        </div>
-        </div>
-      </section>
       <section class="section-20 section-md-5 bg-gray-lighter">
       <div class="cell-md-8 offset-top">
-       
         <!-- Responsive-tabs-->
         <div class="container text-center mt-6 section-20">
           {% if messages %}
@@ -92,6 +82,7 @@
           <div class="resp-tabs-container">
             <div>
               <div class="container text-center mt-6 section-30">
+                <div class="table-responsive offset-top-10">
               <table class="table table-dark" id="data">
                 <thead>
                   <tr>
@@ -126,8 +117,8 @@
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
-                    <div class="modal-body" style="width: 650px; height: 500px;">
-                      <img src="{{imagen_pin_a}}" style="width: 100%; height: 95%;"/>
+                    <div class="modal-body" style="width:85%; height: 75%; object-fit: cover; object-position: center center;">
+                      <img src="{{imagen_pin_a}}" style="width: 100%; height: 100%; "/>
                     </div>
                   </div>
                 </div>
@@ -146,9 +137,11 @@
                 </tbody>
               </table>
             </div>
+          </div>
             </div>
             <div>
               <div class="container text-center mt-6 section-30">
+                <div class="table-responsive offset-top-10">
               <table class="table table-dark" id="data_b">
                 <thead>
                   <tr>
@@ -183,8 +176,8 @@
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
-                    <div class="modal-body" style="width: 650px; height: 500px;">
-                      <img src="{{imagen_pin_b}}" style="width: 100%; height: 95%;"/>
+                    <div class="modal-body" style="width:85%; height: 75%; object-fit: cover; object-position: center center;">
+                      <img src="{{imagen_pin_b}}" style="width: 100%; height: 100%; "/>
                     </div>
                   </div>
                 </div>
@@ -202,6 +195,7 @@
                   {% endif %}
                 </tbody>
               </table>
+            </div>
             </div>
             </div>
           </div>
