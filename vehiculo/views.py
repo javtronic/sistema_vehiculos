@@ -192,7 +192,6 @@ def detalle_vehiculo(request):
 def lst_vehiculo(request):
     db_fabricantes = database.child('fabricante').shallow().get().val()
     list_fabricantes=[]
-
     for i in db_fabricantes:
         list_fabricantes.append(i)
     list_fabricantes.sort(reverse=True)
@@ -203,33 +202,26 @@ def lst_vehiculo(request):
     socket_a = []
     socket_b = []
     descripcion = []
-    list_v = []
     list_f = []
+    list_v = []
 
     for i in list_fabricantes:
         name_factory = database.child('fabricante').child(i).child('nombre').get().val() 
-                
         autos = database.child('fabricante').child(i).child('vehiculos').shallow().get().val()
         if autos != None:    
             for j in autos:
-                list_v.append(j)
-
-            for j in list_v:
                 id_f = database.child('fabricante').child(i).get().key()
-                model = database.child('fabricante').child(i).child('vehiculos').child(j).child('modelo').get().val()
-                imgs = database.child('fabricante').child(i).child('vehiculos').child(j).child('imagen').get().val()
-                s_a = database.child('fabricante').child(i).child('vehiculos').child(j).child('socket_a').get().val()
-                s_b = database.child('fabricante').child(i).child('vehiculos').child(j).child('socket_b').get().val()
-                descr = database.child('fabricante').child(i).child('vehiculos').child(j).child('descripcion').get().val()
-
-                if model != None:    
-                    nombre_fabricante.append(name_factory)
-                    modelo_vehiculo.append(model)
-                    img_vehiculo.append(imgs)
-                    socket_a.append(s_a)
-                    socket_b.append(s_b)
-                    descripcion.append(descr)
-                    list_f.append(id_f)
+                id_v = database.child('fabricante').child(i).child('vehiculos').child(j).get().key()
+                lst_auto = database.child('fabricante').child(i).child('vehiculos').child(j).get().val()
+                 
+                nombre_fabricante.append(name_factory)
+                modelo_vehiculo.append(lst_auto['modelo'])
+                img_vehiculo.append(lst_auto['imagen'])
+                socket_a.append(lst_auto['socket_a'])
+                socket_b.append(lst_auto['socket_b'])
+                descripcion.append(lst_auto['descripcion'])
+                list_f.append(id_f)
+                list_v.append(id_v)
         
     comb_list = zip(list_f,list_v,nombre_fabricante,modelo_vehiculo,img_vehiculo,socket_a,socket_b,descripcion)
 
