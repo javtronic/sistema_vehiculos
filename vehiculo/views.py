@@ -139,38 +139,32 @@ def detalle_vehiculo(request):
     socket_a = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('socket_a').get().val()
     socket_b = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('socket_b').get().val()
 
-    lst_pines = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').shallow().get().val()
-    pines=[]
-    if lst_pines != None:
-        for i in lst_pines:
-            pines.append(i)
+    lst_pines = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').get().val()
 
-    socket = []
     id_pin_a = []
     id_pin_b = []
     pin_a = []
     pin_b = []
     imagen_pin_a = []
     imagen_pin_b = []
+    values = []
 
     if lst_pines != None:
-        for i in pines:
-            id_p = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(i).get().key()
-            sock = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(i).child('socket').get().val()
-            p = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(i).child('pin').get().val()
-            imag_pin = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(i).child('imagen').get().val()
-
-            if sock == 'A':
-                id_pin_a.append(id_p)
-                pin_a.append(p)
-                imagen_pin_a.append(imag_pin)
-            elif sock == 'B':
-                id_pin_b.append(id_p)
-                pin_b.append(p)
-                imagen_pin_b.append(imag_pin)
-        
-    pin_a.sort(reverse=False)
-    pin_b.sort(reverse=False)    
+        for i in lst_pines:
+            lst_pin = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(i).get().val()
+            values.append(list(lst_pin.items()))
+       
+    values.sort(key=lambda x: x[2]) #sort por pin
+    #print(values)
+    for i in values:
+        if i[3][1] == 'A':
+            id_pin_a.append(i[0][1])
+            imagen_pin_a.append(i[1][1])
+            pin_a.append(i[2][1])
+        elif i[3][1] == 'B':
+            id_pin_b.append(i[0][1])
+            imagen_pin_b.append(i[1][1])
+            pin_b.append(i[2][1])
 
     comb_lst_a = zip()
     comb_lst_b = zip()
@@ -180,6 +174,7 @@ def detalle_vehiculo(request):
         mensaje = "No se han registrado Pines"
     else:
         comb_lst_a = zip(id_pin_a,pin_a,imagen_pin_a)
+        
     mensaje_b = ""
     if len(id_pin_b) == 0:
         mensaje_b = "No se han registrado Pines"
@@ -336,8 +331,9 @@ def post_crear_pin(request):
     if socket == "A":
         if p <= a:
             data = {
+                'id':id_pin,
                 'socket': socket,
-                'pin':pin,
+                'pin':int(pin),
                 'imagen': imagen
             }
             database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(id_pin).set(data)
@@ -350,8 +346,9 @@ def post_crear_pin(request):
     elif socket == "B":
         if p <= b:
             data = {
+                'id':id_pin,
                 'socket': socket,
-                'pin':pin,
+                'pin':int(pin),
                 'imagen': imagen
             }
             database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(id_pin).set(data)
@@ -369,7 +366,7 @@ def eliminar_pin(request):
     id_pin = x[2]
     p = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(id_pin).child('pin').get().val()
     database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(id_pin).remove()
-    messages.error(request, 'Se ha eliminado el Pin '+ p)
+    messages.error(request, 'Se ha eliminado el Pin ' + str(p))
     return redirect('/detalle_vehiculo/?k='+id_fabricante+','+id_vehiculo)
 
 

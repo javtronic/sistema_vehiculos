@@ -38,6 +38,7 @@
               <form action="/post_crear_pin/" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="parameter" value="{{parameter}}">
+                <input type="hidden" id="modelo" name="modelo" value="{{modelo}}">
                 <div class="form-group offset-top-30">
                   <label for="nombre"><h6>Seleccione un Socket:</h6></label><br>
                   <div class="form-control">
@@ -89,10 +90,11 @@
       var storage = firebase.storage();
 
       var file = document.getElementById("files").files[0];
+      var modelo = document.getElementById("modelo").value;
 
       var storageRef = storage.ref();
 
-      var thisref = storageRef.child("Pins").child(file.name).put(file);
+      var thisref = storageRef.child("Pins").child(modelo).child(file.name).put(file);
 
       thisref.on('state_changed', function (snapshot) {
           },
