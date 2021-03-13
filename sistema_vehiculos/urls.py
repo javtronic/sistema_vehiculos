@@ -33,6 +33,7 @@ urlpatterns = [
     path('actualizar/', views.actualizar, name="actualizar"),
     path('eliminar/', views.eliminar, name="eliminar"),
     path('lst_vehiculo_by_fab/', v_fabricante.lst_vehiculo_by_fab, name="lst_vehiculo_by_fab"),
+    path('buscar_v_f/', v_fabricante.buscar_v_f, name="buscar_v_f"),
     #Fabricante
     path('lst_fabricante/', v_fabricante.lst_fabricante, name="lst_fabricante"),
     path('buscar_f/', v_fabricante.buscar_f, name="buscar_f"),
@@ -45,6 +46,7 @@ urlpatterns = [
     path('crear_pin/', views.crear_pin, name="crear_pin"),
     path('post_crear_pin/', views.post_crear_pin, name="post_crear_pin"),
     path('eliminar_pin/', views.eliminar_pin, name="eliminar_pin"),
+    path('lst_pines/', views.lst_pines, name="lst_pines"),
     #Auth
     path('sign_in/', auth.sign_in, name="sign_in"),
     path('post_sign_in/', auth.post_sign_in, name="post_sign_in"),

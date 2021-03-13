@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en" class="wide wow-animation">
 <head>
-<title>Home</title>
+<title>Editar</title>
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,7 +17,7 @@
     <main class="page-content">
         {% if messages %}
           {% for mensaje in messages %}
-            <div class="alert {% if mensaje.tags == 'success'%} alert-success{% else %} alert-danger {% endif %}" role="alert" style="color: black;">
+            <div class="alert {% if mensaje.tags == 'success'%} alert-success{% else %} alert-warning {% endif %}" role="alert" style="color: black;">
               <strong>{{ mensaje }}</strong>
               <button type="button" class="close" data-dismiss="alert" arial-label="close">
                 <spam aria-hidden="true">&times;</spam>
@@ -39,6 +39,7 @@
                 <!-- form -->
                 <form action="/actualizar/">
                   {% csrf_token %}
+                  <input type="hidden" name="nav" value="{{ f }}">
                   <input type="hidden" name="id_vehiculo" value="{{ id_vehiculo }}">
                   <input type="hidden" name="id_fabricante" value="{{ id_fabricante }}">
                   
@@ -51,18 +52,9 @@
                     <input type="text" class="form-control" id="descripcion" name="descripcion" value="{{ descripcion }}" placeholder="Descripción" required>
                   </div>
                   <div class="form-group offset-top-20">
-                    <label for="nr_pines"><h6>Número de Pines</h6></label>
-                    <table>
-                      <td style="width: 45%;">
-                        <label for="socket_a"><h7>Socket A</h7></label>
-                        <input type="number" class="form-control stepper-input" id="socket_a" name="socket_a" placeholder="Socket A" value="{{ socket_a }}" required>
-                      </td>
-                      <td style="width: 2%;"></td>
-                      <td style="width: 50%;">
-                        <label for="socket_b"><h7>Socket B</h7></label>
-                        <input type="number" class="form-control stepper-input" id="socket_b" name="socket_b" placeholder="Socket B" value="{{ socket_b }}" required>
-                      </td>
-                    </table>
+                    <label for="nsockets"><h6>Número de Sockets</h6></label>
+                    <input type="number" class="form-control stepper-input" id="nsockets" name="nsockets" value="{{ nsockets }}" placeholder="Nro. Sockets"
+                    min="1" max="50" required>
                   </div>
                   <div class="form-group offset-top-30">
                     <label for="imagen"><h6>Imagen del Vehículo</h6></label>
@@ -78,6 +70,13 @@
                   </div>
                   <div class="form-group offset-top-30">
                     <button type="submit" class="btn btn-rect btn-success">Actualizar</button>
+                  {% if f %}
+                  <button type="button" class="btn btn-rect btn-danger"
+                  onclick="location.href='/lst_vehiculo_by_fab/?z={{id_fabricante}}'">Cancelar</button>
+                  {% else %}
+                  <button type="button" class="btn btn-rect btn-danger"
+                  onclick="location.href='{% url 'lst_vehiculo' %}'">Cancelar</button>
+                  {% endif %}
                   </div>
                 </form>
               </div>

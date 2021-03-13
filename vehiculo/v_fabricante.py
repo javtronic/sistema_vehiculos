@@ -24,23 +24,16 @@ database = firebase.database()
     Datos Fabricante
 '''
 def index(request):
-    timestamps = database.child('fabricante').shallow().get().val()
-    list_time=[]
-    if timestamps != None:
-        for i in timestamps:
-            list_time.append(i)
-
-    list_time.sort(reverse=True)
-
     nombre = []
     imagen = []
-        
-    for i in list_time:
-        image = database.child('fabricante').child(i).child('imagen').get().val()
-        name = database.child('fabricante').child(i).child('nombre').get().val()
-
-        nombre.append(name)
-        imagen.append(image)
+    list_time=[]
+    fabricantes = database.child('fabricante').shallow().get().val()
+    if fabricantes != None:
+        for i in fabricantes:
+            lst_fabricantes = database.child('fabricante').child(i).get().val()
+            imagen.append(lst_fabricantes['imagen'])
+            nombre.append(lst_fabricantes['nombre'])
+            list_time.append(i)
         
     comb_lst = zip(list_time,nombre,imagen)
         
@@ -49,23 +42,16 @@ def index(request):
     })
 
 def lst_fabricante(request):
-    timestamps = database.child('fabricante').shallow().get().val()
-    list_time=[]
-    if timestamps != None:
-        for i in timestamps:
-            list_time.append(i)
-
-    list_time.sort(reverse=True)
-
     nombre = []
     imagen = []
-        
-    for i in list_time:
-        image = database.child('fabricante').child(i).child('imagen').get().val()
-        name = database.child('fabricante').child(i).child('nombre').get().val()
-
-        nombre.append(name)
-        imagen.append(image)
+    list_time=[]
+    fabricantes = database.child('fabricante').shallow().get().val()
+    if fabricantes != None:
+        for i in fabricantes:
+            lst_fabricantes = database.child('fabricante').child(i).get().val()
+            imagen.append(lst_fabricantes['imagen'])
+            nombre.append(lst_fabricantes['nombre'])
+            list_time.append(i)
         
     comb_lst = zip(list_time,nombre,imagen)
         
@@ -133,8 +119,8 @@ def post_crear_fabricante(request):
     }
 
     database.child('fabricante').child(id_fabricante).set(data)
-    messages.success(request, 'Fabricante Ingresado')
-    return lst_fabricante(request)
+    messages.success(request, 'Fabricante '+ nombre +' Ingresado')
+    return redirect('/lst_fabricante/')
 
 def editar_fabricante(request):
     i = request.GET.get('z')
@@ -153,8 +139,7 @@ def actualizar_fabricante(request):
         "imagen": imagen
     })
     messages.success(request, 'se ha Actualizado el Fabricante ' + nombre)
-
-    return lst_fabricante(request)
+    return redirect('/lst_fabricante/')
 
 def eliminar_fabricante(request):
     id_fabricante = request.GET.get('z')
@@ -162,11 +147,11 @@ def eliminar_fabricante(request):
     lst_fabricantes = database.child('fabricante').child(id_fabricante).child('vehiculos').shallow().get().val()
     if lst_fabricantes != None:
         messages.error(request, 'No se ha podido eliminar el Fabricante '+ nombref + ' contiene Vehículos Registrados')
-        return lst_fabricante(request)
+        return redirect('/lst_fabricante/')
     else:
         messages.error(request, 'Se ha eliminado el Fabricante '+ nombref)
         database.child('fabricante').child(id_fabricante).remove()
-        return lst_fabricante(request)
+        return redirect('/lst_fabricante/')
 
 def lst_vehiculo_by_fab(request):
     id_fabricante = request.GET.get('z')
@@ -175,28 +160,63 @@ def lst_vehiculo_by_fab(request):
     list_v = []
     modelo_vehiculo = []
     img_vehiculo = []
-    socket_a = []
-    socket_b = []
+    nsockets = []
     descripcion = []
-    if autos != None:    
+    if autos != None:   
         for i in autos:
+            lst_auto = database.child('fabricante').child(id_fabricante).child('vehiculos').child(i).get().val()
+            modelo_vehiculo.append(lst_auto['modelo'])
+            img_vehiculo.append(lst_auto['imagen'])
+            nsockets.append(lst_auto['nsockets'])
+            descripcion.append(lst_auto['descripcion'])
             list_v.append(i)
-
-        for i in list_v:
-            model = database.child('fabricante').child(id_fabricante).child('vehiculos').child(i).child('modelo').get().val()
-            imgs = database.child('fabricante').child(id_fabricante).child('vehiculos').child(i).child('imagen').get().val()
-            s_a = database.child('fabricante').child(id_fabricante).child('vehiculos').child(i).child('socket_a').get().val()
-            s_b = database.child('fabricante').child(id_fabricante).child('vehiculos').child(i).child('socket_b').get().val()
-            descr = database.child('fabricante').child(id_fabricante).child('vehiculos').child(i).child('descripcion').get().val()
-            if model != None:    
-                modelo_vehiculo.append(model)
-                img_vehiculo.append(imgs)
-                socket_a.append(s_a)
-                socket_b.append(s_b)
-                descripcion.append(descr)
     
-    comb_list = zip(list_v,modelo_vehiculo,img_vehiculo,socket_a,socket_b,descripcion)
+    comb_list = zip(list_v,modelo_vehiculo,img_vehiculo,nsockets,descripcion)
 
     return render(request,'lst_vehiculo_by_fab.html',{ 'nombre_fabricante':nombre_fabricante,
         'id_fabricante':id_fabricante, 'comb_list': comb_list,
     })
+
+def buscar_v_f(request):
+    if request.method == 'GET' and 'csrfmiddlewaretoken' in request.GET:
+        search = request.GET.get('search')
+        fabricante = request.GET.get('fabricante')
+        search = search.lower()
+
+        list_vehiculos=[]
+        name_factory = database.child('fabricante').child(fabricante).child('nombre').get().val()            
+        autos = database.child('fabricante').child(fabricante).child('vehiculos').shallow().get().val()
+        if autos != None:    
+            for j in autos:
+                lst_auto = database.child('fabricante').child(fabricante).child('vehiculos').child(j).get().val()
+                lst = str(fabricante)+"$"+str(name_factory)+"$"+str(j)+"$"+str(lst_auto['modelo'])+"$"+str(lst_auto['descripcion'])
+                list_vehiculos.append(lst)                       
+        
+        matching = [str(string) for string in list_vehiculos if search in string.lower()]
+
+        nombre_fabricante = []
+        modelo_vehiculo = []
+        descripcion = []
+        img_vehiculo = []
+        socket = []
+        list_v = []
+        list_f = []
+
+        for i in matching:
+            lst_f,n_fabricante,lst_v,m_vehiculo,desc = i.split("$")
+            list_f.append(lst_f)
+            nombre_fabricante.append(n_fabricante)
+            list_v.append(lst_v)
+            modelo_vehiculo.append(m_vehiculo)
+            descripcion.append(desc)
+
+        for i in range(len(list_f)):
+            imgs = database.child('fabricante').child(list_f[i]).child('vehiculos').child(list_v[i]).child('imagen').get().val()
+            nsocket = database.child('fabricante').child(list_f[i]).child('vehiculos').child(list_v[i]).child('nsocket').get().val()
+            img_vehiculo.append(imgs)
+            socket.append(nsocket)
+
+        comb_list = zip(list_f,list_v,nombre_fabricante,modelo_vehiculo,img_vehiculo,socket,descripcion)
+        return render(request,'lst_vehiculo.html',{
+            'comb_list': comb_list,
+        })

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en" class="wide wow-animation">
 <head>
-<title>Home</title>
+<title>Crear</title>
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,18 +39,19 @@
                 {% csrf_token %}
                 <input type="hidden" name="parameter" value="{{parameter}}">
                 <input type="hidden" id="modelo" name="modelo" value="{{modelo}}">
-                <div class="form-group offset-top-30">
+                <div class="form-group offset-top-20">
                   <label for="nombre"><h6>Seleccione un Socket:</h6></label><br>
-                  <div class="form-control">
-                    <input type="radio" id="socket_a" name="socket" value="A" required>
-                    <label for="male" class=""><h7 style="color: black;">Socket A&nbsp;</h7></label>
-                    <input type="radio" id="socket_b" name="socket" value="B" required>
-                    <label for="female"><h7 style="color: black;">Socket B</h7></label><br>
-                  </div>
+                  <select name="socket" id="socket" required>
+                    <option value="{{actual_sock}}" selected>{{actual_sock}}</option>
+                    {% for i in lst_sockets %}
+                      <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                  </select>
                 </div>
                 <div class="form-group offset-top-20">
                   <label for="modelo"><h6>Nro. de Pin</h6></label>
-                  <input type="number" class="form-control stepper-input" id="pin" name="pin" placeholder="Nro de Pin" required>
+                  <input type="number" class="form-control stepper-input" id="pin" name="pin" placeholder="Nro de Pin" 
+                  min="1" max="300" required>
                 </div>
                 <div class="form-group offset-top-30">
                   <label for="modelo"><h6>Imagen</h6></label>
@@ -59,6 +60,8 @@
                 </div>
                 <div class="form-group offset-top-30">
                   <button type="submit" class="btn btn-rect btn-success">Registrar</button>
+                  <button type="button" class="btn btn-rect btn-danger"
+                  onclick="location.href='/lst_pines/?k={{parameter}}'">Cancelar</button>
                 </div>
               </form>
             </div>

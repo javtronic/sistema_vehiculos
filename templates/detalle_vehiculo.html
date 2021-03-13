@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en" class="wide wow-animation">
 <head>
-<title>Home</title>
+<title>Detalle Veh&iacute;culo</title>
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,7 +16,28 @@
 <div class="page">
   {% include 'menu.html' %}
     <main class="page-content">
-      <section class="section-50 section-md-80">
+      <div class="container text-center mt-4">
+        {% if f %}
+        <a href="/lst_vehiculo_by_fab/?z={{f}}" class="btn btn-xs btn-rect btn-danger btn-icon btn-icon-left btn-rect pull-md-left offset-lg-top-10 offset-top-20 reveal-block reveal-sm-inline-block">
+          <span class="icon icon-md	mdi-arrow-left-bold"></span><span>Regresar</span></a>
+        {% else %}
+        <a href="{% url 'lst_vehiculo' %}" class="btn btn-xs btn-rect btn-danger btn-icon btn-icon-left btn-rect pull-md-left offset-lg-top-10 offset-top-20 reveal-block reveal-sm-inline-block">
+          <span class="icon icon-md	mdi-arrow-left-bold"></span><span>Regresar</span></a>
+        {% endif %}
+      </div>
+      <section class="section-50 section-md-60">
+        <div class="container text-center mt-6 section-20">
+          {% if messages %}
+          {% for mensaje in messages %}
+            <div class="alert {% if mensaje.tags == 'success'%} alert-success{% else %} alert-warning {% endif %}" role="alert" style="color: black;">
+              <strong>{{ mensaje }}</strong>
+              <button type="button" class="close" data-dismiss="alert" arial-label="close">
+              <spam aria-hidden="true">&times;</spam>
+              </button>
+            </div><br>
+          {% endfor %}    
+        {% endif %}
+      </div>
         <div class="shell">
           <div class="range text-center">
             <div class="cell-md-6 inset-md-left-38 inset-md-right-38">
@@ -26,182 +47,36 @@
               <p class="offset-top-30 offset-md-top-20"><strong>Fabricante: </strong>{{ nombre_fabricante }}</p>
               <p class="offset-top-30 offset-md-top-10"><strong>Modelo: </strong>{{ modelo }}</p>
               <p class="offset-top-30 offset-md-top-10"><strong>Descripción: </strong>{{ descripcion }}</p>
-              <!-- aqui debe ir if de login -->
-              {% if request.session.uid %}  
-              <div class="text-center offset-top-30">
-                <a href="/crear_pin/?k={{parameter}}" class="btn btn-sm-3 btn-primary btn-icon btn-icon-left btn-shadow btn-rect">
-                  <span class="icon icon-md	mdi-plus-box"></span>
-                  <span>Nuevo PIN</span>
-                </a>
-              </div>
-              {% endif %}
+              <p class="offset-top-30 offset-md-top-10"><strong>Nro. Sockets: </strong>{{ nsockets }}</p>
+
+              <div class="responsive-tabs responsive-tabs-horizontal-buttons offset-top-30 responsive-tabs-default">
+              <table class="table table-striped-custom" id="data">
+                <thead>
+                  <tr><th colspan="3" style="text-align: center;" >LISTADO DE SOCKETS</th></tr>
+                </thead>
+                <tbody>
+                  <!-- for -->
+                  {% for i in lst_sockets %}               
+                  <tr>
+                    <td style="width: 40%; text-align: center;">{{i}}</td>
+                    <td style="width: 40%;"><a href="/lst_pines/?k={{id_fabricante}},{{id_vehiculo}},{{i}}" data-toggle="modal"
+                        class="btn btn-xs btn-rect btn-success"><span class="icon icon-md mdi-eye"></span></a></td>
+                  </tr>                  
+                  {% endfor %}
+                  <!-- finfor -->
+                </tbody>
+              </table>
+            </div>
             </div>
             <div class="cell-md-6 offset-top-50 offset-md-top-0 inset-md-left-38 inset-md-right-38">
                 <div class="cell-sm-6 cell-lg-3">
                     <div class="thumbnail-custom"><img src="{{imagen_sec}}" alt="" width="620" height="300"/>    
                     </div>
-                     
                 </div>
             </div>
           </div>
         </div>
       </section>
-      <section class="section-20 section-md-5 bg-gray-lighter">
-      <div class="cell-md-8 offset-top">
-        <!-- Responsive-tabs-->
-        <div class="container text-center mt-6 section-20">
-          {% if messages %}
-          {% for mensaje in messages %}
-            <div class="alert {% if mensaje.tags == 'success'%} alert-success {% else %} alert-warning {% endif %}" role="alert" style="color: black;">
-              <strong>{{ mensaje }}</strong>
-              <button type="button" class="close" data-dismiss="alert" arial-label="close">
-              <spam aria-hidden="true">&times;</spam>
-              </button>
-            </div>
-          {% endfor %}    
-        {% endif %}
-        </div>
-        {% if not request.session.uid%}
-        <div class="container text-center mt-4">
-          <a href="{% url 'crear_solicitud' %}" class="pull-md-right offset-lg-top-10 offset-top-20 reveal-sm-inline-block">
-            <span>¡Solicítalo Aqui!</span></a>
-            <p class="pull-md-right offset-lg-top-10 offset-top-20 reveal-block reveal-sm-inline-block">¿No existe el Pin?&nbsp;</p><br>
-        </div>
-        {% endif %}
-        <div class="responsive-tabs responsive-tabs-horizontal-buttons offset-top-30 responsive-tabs-default">
-          <div class="container text-left mt-5">
-          <ul class="resp-tabs-list">
-            <li>
-              <span class="icon icon-md mdi-fan"></span><span> Socket A</span>
-            </li>
-            <li>
-              <span class="icon icon-md	mdi-fan"></span><span> Socket B</span>
-            </li>
-          </ul>
-          </div>
-          <div class="resp-tabs-container">
-            <div>
-              <div class="container text-center mt-6 section-30">
-                <div class="table-responsive offset-top-10">
-              <table class="table table-dark" id="data">
-                <thead>
-                  <tr>
-                    <th style="text-align: center;" >Imagen</th>
-                    <th style="text-align: center;" >Nro de Pin</th>
-                    <th style="text-align: center;" colspan="2">Opciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% if mensaje %}
-                  <tr>
-                    <td style="text-align: left;" colspan="2">
-                      <h6 class="txt-primary" style="color: brown;">{{mensaje}}</h6>
-                    </td>
-                  </tr>
-                  {% else %}
-                    {% for id_pin_a, pin_a,imagen_pin_a in comb_lst_a %}
-                    <tr>
-                      <td style="width: 15%;">
-                        <img src="{{imagen_pin_a}}" class="img-fluid" style="width: 100px; height: 75px;">
-                     </td>
-                     <td>PIN {{pin_a}}</td>
-                     <td style="width: 3%;"><a href="" data-toggle="modal" data-target="#{{id_pin_a}}"
-                       class="btn btn-xs btn-rect btn-success"> Ver Pin <span class="icon icon-md mdi-eye"></span></a></td>
-                      <!-- The Modal -->
-              <div class="modal" tabindex="-1" role="dialog" id="{{id_pin_a}}">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">PIN {{pin_a}}</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body" style="width:85%; height: 75%; object-fit: cover; object-position: center center;">
-                      <img src="{{imagen_pin_a}}" style="width: 100%; height: 100%; "/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-                     {% if request.session.uid %}
-                     <td style="width: 3%;"><a href="/eliminar_pin/?k={{parameter}},{{id_pin_a}}" class="btn btn-xs btn-rect btn-danger"
-                      onclick="return confirm('¿Desea Eliminar este Pin?');">
-                        <span class="icon icon-md mdi-delete-variant"></span>
-                        <span>Eliminar</span>
-                      </a>
-                     </td>
-                     {% endif %}
-                    </tr>
-                    {% endfor %}
-                  {% endif %}
-                </tbody>
-              </table>
-            </div>
-          </div>
-            </div>
-            <div>
-              <div class="container text-center mt-6 section-30">
-                <div class="table-responsive offset-top-10">
-              <table class="table table-dark" id="data_b">
-                <thead>
-                  <tr>
-                    <th style="text-align: center;" >Imagen</th>
-                    <th style="text-align: center;" >Nro de Pin</th>
-                    <th style="text-align: center;" colspan="2">Opciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% if mensaje_b %}
-                  <tr>
-                    <td style="text-align: left;" colspan="2">
-                      <h6 class="txt-primary" style="color: brown;">{{mensaje_b}}</h6>
-                    </td>
-                  </tr>
-                  {% else %}
-                  {% for id_pin_b, pin_b,imagen_pin_b in comb_lst_b %}
-                    <tr>
-                      <td style="width: 15%;">
-                        <img src="{{imagen_pin_b}}" class="img-fluid" style="width: 100px; height: 75px;">
-                     </td>
-                     <td>PIN {{pin_b}}</td>
-                     <td style="width: 3%;"><a href="" data-toggle="modal" data-target="#{{id_pin_b}}"
-                       class="btn btn-xs btn-rect btn-success"> Ver Pin <span class="icon icon-md mdi-eye"></span></a></td>
-                      <!-- The Modal -->
-              <div class="modal" tabindex="-1" role="dialog" id="{{id_pin_b}}">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">PIN {{pin_b}}</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body" style="width:85%; height: 75%; object-fit: cover; object-position: center center;">
-                      <img src="{{imagen_pin_b}}" style="width: 100%; height: 100%; "/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-                     {% if request.session.uid %}
-                     <td style="width: 3%;"><a href="/eliminar_pin/?k={{parameter}},{{id_pin_b}}" class="btn btn-xs btn-rect btn-danger"
-                      onclick="return confirm('¿Desea Eliminar este Pin?');">
-                        <span class="icon icon-md mdi-delete-variant"></span>
-                        <span>Eliminar</span>
-                      </a>
-                     </td>
-                     {% endif %}
-                    </tr>
-                    {% endfor %}
-                  {% endif %}
-                </tbody>
-              </table>
-            </div>
-            </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
     </main>
     {% include 'footer.html' %}
 </div> 

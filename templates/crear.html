@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en" class="wide wow-animation">
 <head>
-<title>Home</title>
+<title>Crear</title>
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -51,18 +51,9 @@
                   <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripción" required>
                 </div>
                 <div class="form-group offset-top-20">
-                  <label for="nr_pines"><h6>Número de Pines</h6></label>
-                  <table>
-                    <td style="width: 45%;">
-                      <label for="socket_a"><h7>Socket A</h7></label>
-                      <input type="number" class="form-control stepper-input" id="socket_a" name="socket_a" placeholder="Socket A" required>
-                    </td>
-                    <td style="width: 2%;"></td>
-                    <td style="width: 50%;">
-                      <label for="socket_b"><h7>Socket B</h7></label>
-                      <input type="number" class="form-control stepper-input" id="socket_b" name="socket_b" placeholder="Socket B" required>
-                    </td>
-                  </table>
+                  <label for="nsockets"><h6>Número de Sockets</h6></label>
+                  <input type="number" class="form-control stepper-input" id="nsockets" name="nsockets" placeholder="Nro. Sockets"
+                  min="1" max="50" required>
                 </div>
                 <div class="form-group offset-top-20">
                   <label for="imagen"><h6>Imagen del Vehículo</h6></label>
@@ -76,6 +67,13 @@
                 </div>
                 <div class="form-group offset-top-30">
                   <button type="submit" class="btn btn-rect btn-success">Registrar</button>
+                  {% if parameter %}
+                  <button type="button" class="btn btn-rect btn-danger"
+                  onclick="location.href='/lst_vehiculo_by_fab/?z={{parameter}}'">Cancelar</button>
+                  {% else %}
+                  <button type="button" class="btn btn-rect btn-danger"
+                  onclick="location.href='{% url 'lst_vehiculo' %}'">Cancelar</button>
+                  {% endif %}
                 </div>
               </form>
             </div>

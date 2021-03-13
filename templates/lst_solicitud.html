@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en" class="wide wow-animation">
 <head>
-<title>Home</title>
+<title>Solicitudes</title>
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,6 +16,10 @@
 <div class="page">
   {% include 'menu.html' %}
     <main class="page-content">
+      <div class="container text-center mt-5">
+        <a href="{% url 'index' %}" class="btn btn-xs btn-rect btn-danger btn-icon btn-icon-left btn-rect pull-md-left offset-lg-top-10 offset-top-20">
+          <span class="icon icon-md	mdi-arrow-left-bold"></span><span>Regresar</span></a>
+    </div>
       <div class="container text-center mt-6 section-20">
         {% if messages %}
         {% for mensaje in messages %}

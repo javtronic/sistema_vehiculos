@@ -17,11 +17,10 @@ config = {
 
 #Initialize Firebase
 firebase = pyrebase.initialize_app(config)
-
 database = firebase.database()
 
 def crear(request):
-    import datetime
+    parameter = request.GET.get('k')
     timestamps = database.child('fabricante').shallow().get().val()
     list_time=[]
     for i in timestamps:
@@ -34,8 +33,8 @@ def crear(request):
         nombre.append(name)
 
     comb_lst = zip(list_time,nombre)
-
-    return render(request,'crear.html',{
+    print(parameter)
+    return render(request,'crear.html',{ 'parameter':parameter,
         'comb_lst': comb_lst,
     })
 
@@ -52,16 +51,14 @@ def post_crear(request):
     #Request Datos
     modelo = request.POST.get('modelo')
     descripcion = request.POST.get('descripcion')
-    socket_a = request.POST.get('socket_a')
-    socket_b = request.POST.get('socket_b')
+    nsockets = request.POST.get('nsockets')
     imagen = request.POST.get('imagen')
     imagen_sec = request.POST.get('imagen_sec')
 
     data = {
         'modelo': modelo,
         'descripcion' : descripcion,
-        'socket_a': socket_a,
-        'socket_b': socket_b,
+        'nsockets': int(nsockets),
         'imagen': imagen,
         'imagen_sec':imagen_sec
     }
@@ -75,39 +72,49 @@ def editar(request):
     x = parameter.split(',')
     id_fabricante = x[0]
     id_vehiculo = x[1]
-
+    f = x[2]
     nombre_fabricante = database.child('fabricante').child(id_fabricante).child('nombre').get().val()
     modelo = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('modelo').get().val()
     descripcion = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('descripcion').get().val()
     imagen = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('imagen').get().val()
     imagen_sec = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('imagen_sec').get().val()
-    socket_a = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('socket_a').get().val()
-    socket_b = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('socket_b').get().val()
+    nsockets = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('nsockets').get().val()
 
-    return render(request,'editar.html',{'nombre_fabricante':nombre_fabricante, 'socket_b':socket_b, 'socket_a':socket_a, 
-    'modelo':modelo, 'descripcion':descripcion, 'imagen':imagen, 'imagen_sec':imagen_sec, 'id_fabricante':id_fabricante, 'id_vehiculo':id_vehiculo})
+    if f == 'f':
+        return render(request,'editar.html',{'nombre_fabricante':nombre_fabricante, 'nsockets':nsockets, 'f':id_fabricante,
+        'modelo':modelo, 'descripcion':descripcion, 'imagen':imagen, 'imagen_sec':imagen_sec, 'id_fabricante':id_fabricante, 'id_vehiculo':id_vehiculo})
+    else:
+        return render(request,'editar.html',{'nombre_fabricante':nombre_fabricante, 'nsockets':nsockets, 'f':'v',
+        'modelo':modelo, 'descripcion':descripcion, 'imagen':imagen, 'imagen_sec':imagen_sec, 'id_fabricante':id_fabricante, 'id_vehiculo':id_vehiculo})
 
 def actualizar(request):
     id_fabricante = request.GET.get('id_fabricante')
     id_vehiculo =  request.GET.get('id_vehiculo')
     modelo = request.GET.get('modelo')
     descripcion = request.GET.get('descripcion')
-    socket_a = request.GET.get('socket_a')
-    socket_b = request.GET.get('socket_b')
+    nsockets = request.GET.get('nsockets')
     imagen = request.GET.get('imagen')
     imagen_sec = request.GET.get('imagen_sec')
-
-    database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).update({
+    nav = request.GET.get('nav')
+    ant_nsocket = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('nsockets').get().val()
+    if int(nsockets) < int(ant_nsocket):
+        nombre_fabricante = database.child('fabricante').child(id_fabricante).child('nombre').get().val()
+        messages.error(request, 'No se ha Actualizado el Vehículo '+ modelo+ ' el Nro de Sockets es inferior al existente')
+        return render(request,'editar.html',{'nombre_fabricante':nombre_fabricante,'nsockets':nsockets,
+    'modelo':modelo, 'descripcion':descripcion, 'imagen':imagen, 'imagen_sec':imagen_sec, 'id_fabricante':id_fabricante, 'id_vehiculo':id_vehiculo})
+    else:
+        database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).update({
         'modelo': modelo,
         'descripcion' : descripcion,
-        'socket_a': socket_a,
-        'socket_b': socket_b,
+        'nsockets': int(nsockets),
         'imagen': imagen,
         'imagen_sec':imagen_sec
-    })
-
-    messages.success(request, 'Se ha Actualizado el Vehículo '+ modelo)
-    return lst_vehiculo(request)
+        })
+        messages.success(request, 'Se ha Actualizado el Vehículo '+ modelo)
+    if nav == 'v':
+        return redirect('/lst_vehiculo/')
+    else:  
+        return redirect('/lst_vehiculo_by_fab/?z='+nav)
 
 def eliminar(request):
     parameter = request.GET.get('k')
@@ -130,59 +137,21 @@ def detalle_vehiculo(request):
     x = parameter.split(',')
     id_fabricante = x[0]
     id_vehiculo = x[1]
-
+    f = x[2]
     nombre_fabricante = database.child('fabricante').child(id_fabricante).child('nombre').get().val()
     modelo = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('modelo').get().val()
     descripcion = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('descripcion').get().val()
     imagen = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('imagen').get().val()
     imagen_sec = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('imagen_sec').get().val()
-    socket_a = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('socket_a').get().val()
-    socket_b = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('socket_b').get().val()
+    nsockets = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('nsockets').get().val()
+    lst_sockets = sockets_definition(nsockets)
 
-    lst_pines = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').get().val()
-
-    id_pin_a = []
-    id_pin_b = []
-    pin_a = []
-    pin_b = []
-    imagen_pin_a = []
-    imagen_pin_b = []
-    values = []
-
-    if lst_pines != None:
-        for i in lst_pines:
-            lst_pin = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(i).get().val()
-            values.append(list(lst_pin.items()))
-       
-    values.sort(key=lambda x: x[2]) #sort por pin
-    #print(values)
-    for i in values:
-        if i[3][1] == 'A':
-            id_pin_a.append(i[0][1])
-            imagen_pin_a.append(i[1][1])
-            pin_a.append(i[2][1])
-        elif i[3][1] == 'B':
-            id_pin_b.append(i[0][1])
-            imagen_pin_b.append(i[1][1])
-            pin_b.append(i[2][1])
-
-    comb_lst_a = zip()
-    comb_lst_b = zip()
-    
-    mensaje = ""
-    if len(id_pin_a) == 0:
-        mensaje = "No se han registrado Pines"
+    if f == 'f':
+        return render(request,'detalle_vehiculo.html',{'parameter':parameter, 'nombre_fabricante':nombre_fabricante, 'id_fabricante': id_fabricante, 'id_vehiculo':id_vehiculo,
+    'nsockets':nsockets, 'lst_sockets':lst_sockets, 'modelo':modelo, 'descripcion':descripcion, 'imagen':imagen, 'imagen_sec':imagen_sec, 'f':id_fabricante})
     else:
-        comb_lst_a = zip(id_pin_a,pin_a,imagen_pin_a)
-        
-    mensaje_b = ""
-    if len(id_pin_b) == 0:
-        mensaje_b = "No se han registrado Pines"
-    else:
-        comb_lst_b = zip(id_pin_b,pin_b,imagen_pin_b)
-
-    return render(request,'detalle_vehiculo.html',{'parameter':parameter, 'nombre_fabricante':nombre_fabricante, 'socket_b':socket_b, 'socket_a':socket_a, 
-    'modelo':modelo, 'descripcion':descripcion, 'imagen':imagen, 'imagen_sec':imagen_sec, 'comb_lst_a':comb_lst_a, 'comb_lst_b':comb_lst_b, 'mensaje':mensaje, 'mensaje_b':mensaje_b})
+        return render(request,'detalle_vehiculo.html',{'parameter':parameter, 'nombre_fabricante':nombre_fabricante, 'id_fabricante': id_fabricante, 'id_vehiculo':id_vehiculo,
+    'nsockets':nsockets, 'lst_sockets':lst_sockets, 'modelo':modelo, 'descripcion':descripcion, 'imagen':imagen, 'imagen_sec':imagen_sec})
 
 def lst_vehiculo(request):
     db_fabricantes = database.child('fabricante').shallow().get().val()
@@ -194,8 +163,7 @@ def lst_vehiculo(request):
     nombre_fabricante = []
     modelo_vehiculo = []
     img_vehiculo = []
-    socket_a = []
-    socket_b = []
+    nsockets = []
     descripcion = []
     list_f = []
     list_v = []
@@ -205,20 +173,16 @@ def lst_vehiculo(request):
         autos = database.child('fabricante').child(i).child('vehiculos').shallow().get().val()
         if autos != None:    
             for j in autos:
-                id_f = database.child('fabricante').child(i).get().key()
-                id_v = database.child('fabricante').child(i).child('vehiculos').child(j).get().key()
                 lst_auto = database.child('fabricante').child(i).child('vehiculos').child(j).get().val()
-                 
                 nombre_fabricante.append(name_factory)
                 modelo_vehiculo.append(lst_auto['modelo'])
                 img_vehiculo.append(lst_auto['imagen'])
-                socket_a.append(lst_auto['socket_a'])
-                socket_b.append(lst_auto['socket_b'])
+                nsockets.append(lst_auto['nsockets'])
                 descripcion.append(lst_auto['descripcion'])
-                list_f.append(id_f)
-                list_v.append(id_v)
+                list_f.append(i)
+                list_v.append(j)
         
-    comb_list = zip(list_f,list_v,nombre_fabricante,modelo_vehiculo,img_vehiculo,socket_a,socket_b,descripcion)
+    comb_list = zip(list_f,list_v,nombre_fabricante,modelo_vehiculo,img_vehiculo,nsockets,descripcion)
 
     return render(request,'lst_vehiculo.html',{
         'comb_list': comb_list,
@@ -237,14 +201,9 @@ def buscar_v(request):
             autos = database.child('fabricante').child(i).child('vehiculos').shallow().get().val()
             if autos != None:    
                 for j in autos:
-                    id_f = database.child('fabricante').child(i).get().key()
-                    model = database.child('fabricante').child(i).child('vehiculos').child(j).child('modelo').get().val()
-
-                    desc = database.child('fabricante').child(i).child('vehiculos').child(j).child('descripcion').get().val()
-
-                    if model != None:    
-                        lst = str(id_f)+"$"+str(name_factory)+"$"+str(j)+"$"+str(model)+"$"+str(desc)
-                        list_vehiculos.append(lst)
+                    lst_auto = database.child('fabricante').child(i).child('vehiculos').child(j).get().val()
+                    lst = str(i)+"$"+str(name_factory)+"$"+str(j)+"$"+str(lst_auto['modelo'])+"$"+str(lst_auto['descripcion'])
+                    list_vehiculos.append(lst)                       
         
         matching = [str(string) for string in list_vehiculos if search in string.lower()]
 
@@ -252,11 +211,9 @@ def buscar_v(request):
         modelo_vehiculo = []
         descripcion = []
         img_vehiculo = []
-        socket_a = []
-        socket_b = []
+        socket = []
         list_v = []
         list_f = []
-        unico = []
 
         for i in matching:
             lst_f,n_fabricante,lst_v,m_vehiculo,desc = i.split("$")
@@ -268,13 +225,11 @@ def buscar_v(request):
 
         for i in range(len(list_f)):
             imgs = database.child('fabricante').child(list_f[i]).child('vehiculos').child(list_v[i]).child('imagen').get().val()
-            s_a = database.child('fabricante').child(list_f[i]).child('vehiculos').child(list_v[i]).child('socket_a').get().val()
-            s_b = database.child('fabricante').child(list_f[i]).child('vehiculos').child(list_v[i]).child('socket_b').get().val()
+            nsocket = database.child('fabricante').child(list_f[i]).child('vehiculos').child(list_v[i]).child('nsocket').get().val()
             img_vehiculo.append(imgs)
-            socket_a.append(s_a)
-            socket_b.append(s_b)
+            socket.append(nsocket)
 
-        comb_list = zip(list_f,list_v,nombre_fabricante,modelo_vehiculo,img_vehiculo,socket_a,socket_b,descripcion)
+        comb_list = zip(list_f,list_v,nombre_fabricante,modelo_vehiculo,img_vehiculo,socket,descripcion)
         return render(request,'lst_vehiculo.html',{
             'comb_list': comb_list,
         })
@@ -287,86 +242,100 @@ def crear_pin(request):
     x = parameter.split(',')
     id_fabricante = x[0]
     id_vehiculo = x[1]
+    actual_sock = x[2]
     nombre_fabricante = database.child('fabricante').child(id_fabricante).child('nombre').get().val()
     modelo = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('modelo').get().val()
-    return render(request,'crear_pin.html',{'parameter':parameter, 'nombre_fabricante':nombre_fabricante, 'modelo':modelo})
+    nro = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('nsockets').get().val()
+    lst_sockets = sockets_definition(nro)
+    for i in lst_sockets:
+        if i == actual_sock:
+            lst_sockets.remove(i)
+    return render(request,'crear_pin.html',{'parameter':parameter, 'nombre_fabricante':nombre_fabricante, 
+    'modelo':modelo, 'lst_sockets':lst_sockets, 'actual_sock':actual_sock})
 
 def post_crear_pin(request):
-    import time
-    from datetime import datetime, timezone
-    import pytz
-    tz = pytz.timezone('America/Guayaquil')
-    time_now = datetime.now(timezone.utc).astimezone(tz)
-    id_pin = int(time.mktime(time_now.timetuple()))
-
     #obtiene parametros para saber donde insertar
     parameter = request.POST.get('parameter')
     x = parameter.split(',')
     id_fabricante = x[0]
     id_vehiculo = x[1]
 
-    a = int(database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('socket_a').get().val())
-    b = int(database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('socket_b').get().val())
-
     socket = request.POST.get('socket')
     pin = request.POST.get('pin')
     imagen = request.POST.get('imagen')
+    data = {
+        'pin':int(pin),
+        'imagen': imagen
+    }
 
-    p = int(pin)
-    #Verificacion de pin existente
-    lst_pines = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').shallow().get().val()
-    pines=[]
-    if lst_pines != None:
-        for i in lst_pines:
-            pines.append(i)
+    lst_sockets = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').shallow().get().val()
+    #Validacion de Pin por Socket
+    if lst_sockets != None:
+        for i in lst_sockets:
+            if i == socket:
+                lst_pins = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(i).shallow().get().val()
+                for j in lst_pins:
+                    if int(j) == int(pin):
+                        messages.error(request, 'En el '+ socket +' ya se ha registrado el Pin '+pin)
+                        return redirect('/crear_pin/?k='+parameter)
 
-    if lst_pines != None:
-        for i in pines:
-            sock = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(i).child('socket').get().val()
-            pi = int(database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(i).child('pin').get().val())
-            if sock == socket and pi == p:
-                messages.error(request, 'El Pin ha registrar ya existe = '+pin)
-                return redirect('/crear_pin/?k='+parameter)
-    
-    if socket == "A":
-        if p <= a:
-            data = {
-                'id':id_pin,
-                'socket': socket,
-                'pin':int(pin),
-                'imagen': imagen
-            }
-            database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(id_pin).set(data)
-            messages.success(request, 'Pin del Socket A Ingresado')
-            return redirect('/detalle_vehiculo/?k='+parameter)
-        else:
-            messages.error(request, 'El vehiculo no cuenta con ese número de socket '+pin)
-            return redirect('/crear_pin/?k='+parameter)
-
-    elif socket == "B":
-        if p <= b:
-            data = {
-                'id':id_pin,
-                'socket': socket,
-                'pin':int(pin),
-                'imagen': imagen
-            }
-            database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(id_pin).set(data)
-            messages.success(request, 'Pin del Socket B Ingresado')
-            return redirect('/detalle_vehiculo/?k='+parameter)
-        else:
-            messages.error(request, 'El vehiculo no cuenta con ese número de socket '+pin)
-            return redirect('/crear_pin/?k='+parameter)
+    database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(socket).child(pin).set(data)
+    messages.success(request, 'Pin del '+ socket +' Ingresado')
+    return redirect('/lst_pines/?k='+parameter)
 
 def eliminar_pin(request):
     parameter = request.GET.get('k')
     x = parameter.split(',')
     id_fabricante = x[0]
     id_vehiculo = x[1]
-    id_pin = x[2]
-    p = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(id_pin).child('pin').get().val()
-    database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(id_pin).remove()
-    messages.error(request, 'Se ha eliminado el Pin ' + str(p))
-    return redirect('/detalle_vehiculo/?k='+id_fabricante+','+id_vehiculo)
+    nsocket = x[2]
+    id_pin = x[3]
+    database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(nsocket).child(id_pin).remove()
+    messages.error(request, 'Se ha eliminado el Pin ' + str(id_pin))
+    return redirect('/lst_pines/?k='+id_fabricante+','+id_vehiculo+','+nsocket)
 
+def lst_pines(request):
+    parameter = request.GET.get('k')
+    x = parameter.split(',')
+    id_fabricante = x[0]
+    id_vehiculo = x[1]
+    nsocket = x[2]
+    nombre_vehiculo = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('modelo').get().val()
+    lst_pines = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(nsocket).shallow().get().val()
 
+    id_pin = []
+    pin = []
+    imagen_pin = []
+    values = []
+    comb_lst = zip()
+    if lst_pines != None:
+        for i in lst_pines:
+            value_pin = database.child('fabricante').child(id_fabricante).child('vehiculos').child(id_vehiculo).child('pines').child(nsocket).child(i).get().val()
+            values.append(list(value_pin.items()))
+
+        values.sort(key=lambda x: x[1]) #sort por pin   
+        # print(values) 
+        for i in values:
+            id_pin.append(i[1][1])
+            pin.append(i[1][1])
+            imagen_pin.append(i[0][1])  
+
+        comb_lst = zip(id_pin,pin,imagen_pin)
+        mensaje = ""
+    else:
+        mensaje = "No se han registrado Pines"
+
+    return render(request,'lst_pines.html', {'parameter':parameter, 'mensaje': mensaje, 'nombre_vehiculo':nombre_vehiculo,
+    'comb_lst':comb_lst})
+
+'''
+    Definicion utilitarios
+'''
+def sockets_definition(nsockets):
+    socket = "Socket "
+    lst_sockets = []
+    if nsockets != None:
+        for i in range(nsockets):
+            val = chr(ord('@')+(i+1))
+            lst_sockets.append(f'{socket}{val}')
+    return lst_sockets
